@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TWorkerMapper">
+
+    <resultMap type="TWorker" id="TWorkerResult">
+        <result property="id" column="id"/>
+        <result property="companyid" column="companyid"/>
+        <result property="loginNo" column="login_no"/>
+        <result property="loginPassword" column="login_password"/>
+        <result property="workerName" column="worker_name"/>
+        <result property="workerSex" column="worker_sex"/>
+        <result property="nation" column="Nation"/>
+        <result property="education" column="Education"/>
+        <result property="homeTown" column="HomeTown"/>
+        <result property="address" column="Address"/>
+        <result property="postcode" column="Postcode"/>
+        <result property="iDCardno" column="IDCardno"/>
+        <result property="email" column="Email"/>
+        <result property="telephone" column="Telephone"/>
+        <result property="mobile" column="Mobile"/>
+        <result property="salary" column="Salary"/>
+        <result property="workAge" column="WorkAge"/>
+        <result property="isLeave" column="is_leave"/>
+        <result property="hiredate" column="hiredate"/>
+        <result property="leavedate" column="leavedate"/>
+        <result property="memo" column="Memo"/>
+        <!--<association property="sysDept" javaType="com.ruoyi.system.domain.SysDept">
+        	<result property="deptId" column="dept_id"/>
+        	<result property="deptName" column="dept_name"/>
+        </association>-->
+        <association property="sysDept" column="dept_id" javaType="com.ruoyi.system.domain.SysDept"
+                     resultMap="deptResult"/>
+    </resultMap>
+
+    <resultMap id="deptResult" type="SysDept">
+        <id property="deptId" column="dept_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="status" column="dept_status"/>
+    </resultMap>
+
+    <sql id="selectTWorkerVo">
+        SELECT tw.id, tw.companyid, tw.login_no, tw.login_password, tw.worker_name,
+        tw.worker_sex, tw.Nation, tw.Education, tw.HomeTown, tw.Address, tw.Postcode,
+        tw.IDCardno, tw.Email, tw.Telephone, tw.Mobile, tw.Salary, tw.WorkAge, tw.is_leave,
+        tw.hiredate, tw.leavedate, Memo, d.dept_name
+        FROM t_worker tw,sys_dept d
+    </sql>
+
+    <select id="selectTWorkerList" parameterType="TWorker" resultMap="TWorkerResult">
+        <include refid="selectTWorkerVo"/>
+        <where>
+            <if test="id != null ">and id = #{id}</if>
+            <if test="companyid != null ">and companyid = #{companyid}</if>
+            <if test="loginNo != null  and loginNo != '' ">and login_no = #{loginNo}</if>
+            <if test="loginPassword != null  and loginPassword != '' ">and login_password = #{loginPassword}</if>
+            <if test="workerName != null  and workerName != '' ">and worker_name = #{workerName}</if>
+            <if test="workerSex != null ">and worker_sex = #{workerSex}</if>
+            <if test="nation != null  and nation != '' ">and Nation = #{nation}</if>
+            <if test="education != null  and education != '' ">and Education = #{education}</if>
+            <if test="homeTown != null  and homeTown != '' ">and HomeTown = #{homeTown}</if>
+            <if test="address != null  and address != '' ">and Address = #{address}</if>
+            <if test="postcode != null  and postcode != '' ">and Postcode = #{postcode}</if>
+            <if test="iDCardno != null  and iDCardno != '' ">and IDCardno = #{iDCardno}</if>
+            <if test="email != null  and email != '' ">and Email = #{email}</if>
+            <if test="telephone != null  and telephone != '' ">and Telephone = #{telephone}</if>
+            <if test="mobile != null  and mobile != '' ">and Mobile = #{mobile}</if>
+            <if test="salary != null ">and Salary = #{salary}</if>
+            <if test="workAge != null ">and WorkAge = #{workAge}</if>
+            <if test="isLeave != null ">and is_leave = #{isLeave}</if>
+            <if test="hiredate != null ">and hiredate = #{hiredate}</if>
+            <if test="leavedate != null ">and leavedate = #{leavedate}</if>
+            <if test="memo != null  and memo != '' ">and Memo = #{memo}</if>
+            <if test="sysDept.deptName != null  and sysDept.deptName != '' ">and d.dept_name = #{sysDept.deptName}</if>
+            and tw.companyid = d.dept_id
+            ${params.dataScope}
+            order by id desc
+        </where>
+
+    </select>
+
+    <select id="selectTWorkerById" parameterType="Long" resultMap="TWorkerResult">
+        <include refid="selectTWorkerVo"/>
+        where id = #{id} and tw.companyid = d.dept_id
+    </select>
+
+    <insert id="insertTWorker" parameterType="TWorker" useGeneratedKeys="true" keyProperty="id">
+        insert into t_worker
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="companyid != null  ">companyid,</if>
+            <if test="loginNo != null  and loginNo != ''  ">login_no,</if>
+            <if test="loginPassword != null  and loginPassword != ''  ">login_password,</if>
+            <if test="workerName != null  and workerName != ''  ">worker_name,</if>
+            <if test="workerSex != null  ">worker_sex,</if>
+            <if test="nation != null  and nation != ''  ">Nation,</if>
+            <if test="education != null  and education != ''  ">Education,</if>
+            <if test="homeTown != null  and homeTown != ''  ">HomeTown,</if>
+            <if test="address != null  and address != ''  ">Address,</if>
+            <if test="postcode != null  and postcode != ''  ">Postcode,</if>
+            <if test="iDCardno != null  and iDCardno != ''  ">IDCardno,</if>
+            <if test="email != null  and email != ''  ">Email,</if>
+            <if test="telephone != null  and telephone != ''  ">Telephone,</if>
+            <if test="mobile != null  and mobile != ''  ">Mobile,</if>
+            <if test="salary != null  ">Salary,</if>
+            <if test="workAge != null  ">WorkAge,</if>
+            <if test="isLeave != null  ">is_leave,</if>
+            <if test="hiredate != null  ">hiredate,</if>
+            <if test="leavedate != null  ">leavedate,</if>
+            <if test="memo != null  and memo != ''  ">Memo,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="companyid != null  ">#{companyid},</if>
+            <if test="loginNo != null  and loginNo != ''  ">#{loginNo},</if>
+            <if test="loginPassword != null  and loginPassword != ''  ">#{loginPassword},</if>
+            <if test="workerName != null  and workerName != ''  ">#{workerName},</if>
+            <if test="workerSex != null  ">#{workerSex},</if>
+            <if test="nation != null  and nation != ''  ">#{nation},</if>
+            <if test="education != null  and education != ''  ">#{education},</if>
+            <if test="homeTown != null  and homeTown != ''  ">#{homeTown},</if>
+            <if test="address != null  and address != ''  ">#{address},</if>
+            <if test="postcode != null  and postcode != ''  ">#{postcode},</if>
+            <if test="iDCardno != null  and iDCardno != ''  ">#{iDCardno},</if>
+            <if test="email != null  and email != ''  ">#{email},</if>
+            <if test="telephone != null  and telephone != ''  ">#{telephone},</if>
+            <if test="mobile != null  and mobile != ''  ">#{mobile},</if>
+            <if test="salary != null  ">#{salary},</if>
+            <if test="workAge != null  ">#{workAge},</if>
+            <if test="isLeave != null  ">#{isLeave},</if>
+            <if test="hiredate != null  ">#{hiredate},</if>
+            <if test="leavedate != null  ">#{leavedate},</if>
+            <if test="memo != null  and memo != ''  ">#{memo},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTWorker" parameterType="TWorker">
+        update t_worker
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companyid != null  ">companyid = #{companyid},</if>
+            <if test="loginNo != null  and loginNo != ''  ">login_no = #{loginNo},</if>
+            <if test="loginPassword != null  and loginPassword != ''  ">login_password = #{loginPassword},</if>
+            <if test="workerName != null  and workerName != ''  ">worker_name = #{workerName},</if>
+            <if test="workerSex != null  ">worker_sex = #{workerSex},</if>
+            <if test="nation != null  and nation != ''  ">Nation = #{nation},</if>
+            <if test="education != null  and education != ''  ">Education = #{education},</if>
+            <if test="homeTown != null  and homeTown != ''  ">HomeTown = #{homeTown},</if>
+            <if test="address != null  and address != ''  ">Address = #{address},</if>
+            <if test="postcode != null  and postcode != ''  ">Postcode = #{postcode},</if>
+            <if test="iDCardno != null  and iDCardno != ''  ">IDCardno = #{iDCardno},</if>
+            <if test="email != null  and email != ''  ">Email = #{email},</if>
+            <if test="telephone != null  and telephone != ''  ">Telephone = #{telephone},</if>
+            <if test="mobile != null  and mobile != ''  ">Mobile = #{mobile},</if>
+            <if test="salary != null  ">Salary = #{salary},</if>
+            <if test="workAge != null  ">WorkAge = #{workAge},</if>
+            <if test="isLeave != null  ">is_leave = #{isLeave},</if>
+            <if test="hiredate != null  ">hiredate = #{hiredate},</if>
+            <if test="leavedate != null  ">leavedate = #{leavedate},</if>
+            <if test="memo != null  and memo != ''  ">Memo = #{memo},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTWorkerById" parameterType="Long">
+        delete from t_worker where id = #{id}
+    </delete>
+
+    <delete id="deleteTWorkerByIds" parameterType="String">
+        delete from t_worker where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

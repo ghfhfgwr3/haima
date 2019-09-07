@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.ConsumeMapper">
+
+    <resultMap type="Consume" id="ConsumeResult">
+                    <result property="id" column="id"/>
+                    <result property="time" column="time"/>
+                    <result property="serialNumber" column="serial_number"/>
+                    <result property="tMemberId" column="t_member_id"/>
+                    <result property="localExpense" column="local_expense"/>
+                    <result property="preExpenseBalance" column="pre_expense_balance"/>
+                    <result property="postExpenseBalance" column="post_expense_balance"/>
+                    <result property="equipmentId" column="equipmentId"/>
+                    <result property="stateID" column="stateID"/>
+                    <result property="equipId" column="equipId"/>
+
+        <association property="tMember" column="id" javaType="com.ruoyi.system.domain.TMember"
+                     resultMap="TMemberResult"   />
+        <association property="tConsumerMachine" column="id" javaType="com.ruoyi.system.domain.TConsumerMachine"
+
+       resultMap="TConsumerMachineResult" />
+
+
+            </resultMap>
+
+    <resultMap id="TMemberResult" type="TMember">
+        <id property="id" column="id"/>
+        <result property="companyid" column="companyid"/>
+        <result property="memberTypeId" column="member_type_id"/>
+        <result property="memberNo" column="member_no"/>
+        <result property="cardid" column="cardid"/>
+
+    </resultMap>
+    <resultMap  id="TConsumerMachineResult" type="TConsumerMachine">
+        <id  property="id"    column="id"    />
+        <result property="shopInfo"    column="shop_info"    />
+        <result property="shopNum"    column="shop_num"    />
+        <result property="kalman"    column="kalman"    />
+        <result property="devMode"    column="dev_mode"    />
+        <result property="domain"    column="domain"    />
+        <result property="port"    column="port"    />
+        <result property="maxMoney"    column="max_money"    />
+        <result property="deposit"    column="deposit"    />
+        <result property="current"    column="current"    />
+        <result property="cardLabeling"    column="card_labeling"    />
+        <result property="discount"    column="discount"    />
+        <result property="cardType"    column="card_type"    />
+        <result property="devName"    column="dev_name"    />
+        <result property="file"    column="file"    />
+        <result property="path"    column="path"    />
+        <result property="account"    column="account"    />
+        <result property="pwd"    column="pwd"    />
+        <result property="devId"    column="dev_id"    />
+        <result property="time"    column="time"    />
+        <result property="state"    column="state"    />
+
+    </resultMap>
+    <sql id="selectConsumeVo">
+        select cs.id, cs.time, cs.serial_number, cs.local_expense, cs.pre_expense_balance, cs.post_expense_balance, cs.stateID ,cs.equipId,t.points,
+        t.balance,t.member_no,tm.device_name
+        from consume cs,t_member t,t_consumer_machine tm
+    </sql>
+
+    <select id="selectConsumeList" parameterType="Consume" resultMap="ConsumeResult">
+        <include refid="selectConsumeVo"/>
+        <where>
+                            <if test="id != null ">and id = #{id}
+                </if>
+                            <if test="time != null ">and time = #{time}
+                </if>
+                            <if test="serialNumber != null  and serialNumber != '' ">and serial_number = #{serialNumber}
+                </if>
+                            <if test="tMemberId != null  and tMemberId != '' ">and t_member_id = #{tMemberId}
+                </if>
+                            <if test="localExpense != null ">and local_expense = #{localExpense}
+                </if>
+                            <if test="preExpenseBalance != null ">and pre_expense_balance = #{preExpenseBalance}
+                </if>
+                            <if test="postExpenseBalance != null ">and post_expense_balance = #{postExpenseBalance}
+                </if>
+                            <if test="equipmentId != null ">and equipmentId = #{equipmentId}
+                </if>
+                            <if test="stateID != null  and stateID != '' ">and stateID = #{stateID}
+        </if>
+                             <if test="equipId != null  and equipId != '' ">and equipId = #{equipId}
+            </if>
+            and  cs.t_member_id = t.id and cs.equipmentId = tm.id
+
+        </where>
+    </select>
+
+    <select id="selectConsumeById" parameterType="Integer" resultMap="ConsumeResult">
+        <include refid="selectConsumeVo"/>
+        where cs.id = #{id} and  cs.t_member_id = t.id and cs.equipmentId = tm.id
+    </select>
+
+    <insert id="insertConsume" parameterType="Consume"            useGeneratedKeys="true" keyProperty="id">
+        insert into consume
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                                                                            <if test="time != null  ">time,
+                    </if>
+                                                                <if test="serialNumber != null  and serialNumber != ''  ">serial_number,
+                    </if>
+                                                                <if test="tMemberId != null  and tMemberId != ''  ">t_member_id,
+                    </if>
+                                                                <if test="localExpense != null  ">local_expense,
+                    </if>
+                                                                <if test="preExpenseBalance != null  ">pre_expense_balance,
+                    </if>
+                         <if test="postExpenseBalance != null  ">post_expense_balance,
+                    </if>
+                                                                <if test="equipmentId != null  ">equipmentId,
+                    </if>
+                                                                <if test="stateID != null  and stateID != ''  ">stateID,
+                    </if>
+                                                                <if test="equipId != null  and equipId != ''  ">equipId,
+                     </if>
+                                    </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                                                                            <if test="time != null  ">#{time},
+                    </if>
+                                                                <if test="serialNumber != null  and serialNumber != ''  ">#{serialNumber},
+                    </if>
+                                                                <if test="tMemberId != null  and tMemberId != ''  ">#{tMemberId},
+                    </if>
+                                                                <if test="localExpense != null  ">#{localExpense},
+                    </if>
+                                                                <if test="preExpenseBalance != null  ">#{preExpenseBalance},
+                    </if>
+                                                                <if test="postExpenseBalance != null  ">#{postExpenseBalance},
+                    </if>
+                                                                <if test="equipmentId != null  ">#{equipmentId},
+                    </if>
+                                                                <if test="stateID != null  and stateID != ''  ">#{stateID},
+                    </if>
+                                                                 <if test="equipId != null  and equipId != ''  ">#{equipId},
+                     </if>
+                                    </trim>
+    </insert>
+
+    <update id="updateConsume" parameterType="Consume">
+        update consume
+        <trim prefix="SET" suffixOverrides=",">
+                                                                            <if test="time != null  ">time = #{time},
+                    </if>
+                                                                <if test="serialNumber != null  and serialNumber != ''  ">serial_number = #{serialNumber},
+                    </if>
+                                                                <if test="tMemberId != null  and tMemberId != ''  ">t_member_id = #{tMemberId},
+                    </if>
+                                                                <if test="localExpense != null  ">local_expense = #{localExpense},
+                    </if>
+                                                                <if test="preExpenseBalance != null  ">pre_expense_balance = #{preExpenseBalance},
+                    </if>
+                                                                <if test="postExpenseBalance != null  ">post_expense_balance = #{postExpenseBalance},
+                    </if>
+                                                                <if test="equipmentId != null  ">equipmentId = #{equipmentId},
+                    </if>
+                                                                <if test="stateID != null  and stateID != ''  ">stateID = #{stateID},
+                    </if>
+                                                                <if test="equipId != null  and equipId != ''  ">equipId = #{equipId},
+                     </if>
+                                    </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteConsumeById" parameterType="Integer">
+        delete from consume where id = #{id}
+    </delete>
+
+    <delete id="deleteConsumeByIds" parameterType="String">
+        delete from consume where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

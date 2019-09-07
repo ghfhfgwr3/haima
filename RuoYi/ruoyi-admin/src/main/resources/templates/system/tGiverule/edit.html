@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改奖励规则')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-tGiverule-edit" th:object="${tGiverule}">
+        <input id="id" name="id" th:field="*{id}" type="hidden">
+        <input name="deptId" type="hidden" th:field="*{companyid}" id="treeId"/>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">店铺名称：</label>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <input class="form-control" type="text" onclick="selectDeptTree()" name="companyid" id="companyid"
+                           readonly="true" th:field="*{sysDept.deptName}">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                </div>
+            </div>
+            <label class="col-sm-2 control-label">会员卡类型：</label>
+            <div class="col-sm-3">
+                <!--<input id="cardtype" name="cardtype" th:field="*{cardtype}" class="form-control" type="text">-->
+                <select name="cardtype" class="form-control m-b" id="cardtype">
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">开始金额：</label>
+            <div class="col-sm-3">
+                <input id="beginMoney" name="beginMoney" th:field="*{beginMoney}" class="form-control" type="text">
+            </div>
+            <label class="col-sm-2 control-label">结束金额：</label>
+            <div class="col-sm-3">
+                <input id="andMoney" name="andMoney" th:field="*{andMoney}" class="form-control" type="text">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">赠送方式：</label>
+            <div class="col-sm-3">
+                <input id="giveType" name="giveType" th:field="*{giveType}" class="form-control" type="text">
+            </div>
+            <label class="col-sm-2 control-label">赠送金额：</label>
+            <div class="col-sm-3">
+                <input id="giveMoney" name="giveMoney" th:field="*{giveMoney}" class="form-control" type="text">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">开始时间：</label>
+            <div class="col-sm-3">
+                <input id="beginDate" name="beginDate" th:field="*{beginDate}" class="form-control" type="text">
+            </div>
+            <label class="col-sm-2 control-label">结束时间：</label>
+            <div class="col-sm-3">
+                <input id="andDate" name="andDate" th:field="*{andDate}" class="form-control" type="text">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">实物奖励编号：</label>
+            <div class="col-sm-3">
+                <input id="givePxs" name="givePxs" th:field="*{givePxs}" class="form-control" type="text">
+            </div>
+            <label class="col-sm-2 control-label">领奖编号：</label>
+            <div class="col-sm-3">
+                <input id="ljType" name="ljType" th:field="*{ljType}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">数量：</label>
+            <div class="col-sm-3">
+                <input id="giveCount" name="giveCount" th:field="*{giveCount}" class="form-control" type="text">
+            </div>
+            <label class="col-sm-2 control-label">有效天数：</label>
+            <div class="col-sm-3">
+                <input id="yxts" name="yxts" th:field="*{yxts}" class="form-control" type="text">
+            </div>
+        </div>
+    </form>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript">
+    var prefix = ctx + "system/tGiverule";
+    var prefix3 = ctx + "system/tMemberType"
+    $("#form-tGiverule-edit").validate({
+        rules: {
+            xxxx: {
+                required: true,
+            },
+        },
+        focusCleanup: true
+    });
+    $(function () {
+        var id = $("#id").val();
+        console.log(id);
+        $.ajax({
+            url: prefix + "/SelectById",
+            data: {"id": id},
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                console.log(data)
+                $("#cardtype").append("<option value='" + data.cardtype + "'>" + data.tMemberType.memberTypeName + "</option>");
+                /*<option > </option>*/
+            }
+        });
+    })
+
+    function submitHandler() {
+        if ($("#cardtype").val() != '') {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-tGiverule-edit').serialize());
+            }
+        }
+    }
+
+    /*用户管理-修改-选择部门树*/
+    function selectDeptTree() {
+        var deptId = $.common.isEmpty($("#treeId").val()) ? "100" : $("#treeId").val();
+        var url = ctx + "system/dept/selectDeptTree/" + deptId;
+        var options = {
+            title: '选择部门',
+            width: "380",
+            url: url,
+            callBack: doSubmit
+        };
+        $.modal.openOptions(options);
+    }
+
+    function doSubmit(index, layero) {
+        var tree = layero.find("iframe")[0].contentWindow.$._tree;
+        if ($.tree.notAllowParents(tree)) {
+            var body = layer.getChildFrame('body', index);
+            $("#treeId").val(body.find('#treeId').val());
+            $("#companyid").val(body.find('#treeName').val());
+            layer.close(index);
+            listTypeName();
+        }
+    }
+
+    function listTypeName() {
+        /*$("#cardtype").html("");*/
+        var memberTypeName = $("#cardtype").html();
+        var memberTypeNameId = $("#cardtype").val();
+        $("#cardtype").html("");
+        $("#cardtype").append("<option value=''>请选择卡类型</option>");
+        var id = $("#treeId").val();
+        $.post(prefix3 + "/TypeName", {"id": id}, function (date) {
+
+
+            for (var i = 0; i < date.length; i++) {
+
+                $("#cardtype").append("<option th:selected='" + date[i].id + "'  value='" + date[i].id + "'>" + date[i].memberTypeName + "</option>");
+            }
+        });
+    }
+</script>
+</body>
+</html>

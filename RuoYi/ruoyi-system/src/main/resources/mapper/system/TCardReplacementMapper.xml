@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TCardReplacementMapper">
+
+    <resultMap type="TCardReplacement" id="TCardReplacementResult">
+        <result property="id" column="id"/>
+        <result property="companyid" column="companyid"/>
+        <result property="cardnoOld" column="cardno_old"/>
+        <result property="cardnoNew" column="cardno_new"/>
+        <result property="operateTime" column="operate_time"/>
+        <result property="operator" column="operator"/>
+        <association property="sysDept" column="dept_id" javaType="com.ruoyi.system.domain.SysDept"
+                     resultMap="deptResult"/>
+    </resultMap>
+
+    <resultMap id="deptResult" type="SysDept">
+        <id property="deptId" column="dept_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="status" column="dept_status"/>
+    </resultMap>
+
+    <sql id="selectTCardReplacementVo">
+        select tc.id, tc.cardno_old, tc.cardno_new, tc.operate_time,
+        tc.operator,d.dept_name,tc.companyid
+        from t_card_replacement tc,sys_dept d
+    </sql>
+
+    <select id="selectTCardReplacementList" parameterType="TCardReplacement" resultMap="TCardReplacementResult">
+        <include refid="selectTCardReplacementVo"/>
+        <where>
+
+            <if test="id != null ">and id = #{id}</if>
+            <if test="cardnoOld != null  and cardnoOld != '' ">and cardno_old = #{cardnoOld}</if>
+            <if test="cardnoNew != null  and cardnoNew != '' ">and cardno_new = #{cardnoNew}</if>
+            <!--  <if test="operateTime != null "> and operate_time = #{operateTime}</if>-->
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(tc.operate_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(tc.operate_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            <if test="operator != null  and operator != '' ">and operator = #{operator}</if>
+            <!-- 数据范围过滤 -->
+            ${params.dataScope}
+            and tc.companyid = d.dept_id order by id desc
+        </where>
+    </select>
+
+    <select id="selectTCardReplacementById" parameterType="Integer" resultMap="TCardReplacementResult">
+        <include refid="selectTCardReplacementVo"/>
+        where id = #{id} and tc.companyid = d.dept_id
+    </select>
+
+    <insert id="insertTCardReplacement" parameterType="TCardReplacement" useGeneratedKeys="true" keyProperty="id">
+        insert into t_card_replacement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="companyid != null  and companyid != ''  ">companyid,</if>
+            <if test="cardnoOld != null  and cardnoOld != ''  ">cardno_old,</if>
+            <if test="cardnoNew != null  and cardnoNew != ''  ">cardno_new,</if>
+            <if test="operateTime != null  ">operate_time,</if>
+            <if test="operator != null  and operator != ''  ">operator,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="companyid != null  and companyid != ''  ">#{companyid},</if>
+            <if test="cardnoOld != null  and cardnoOld != ''  ">#{cardnoOld},</if>
+            <if test="cardnoNew != null  and cardnoNew != ''  ">#{cardnoNew},</if>
+            <if test="operateTime != null  ">#{operateTime},</if>
+            <if test="operator != null  and operator != ''  ">#{operator},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTCardReplacement" parameterType="TCardReplacement">
+        update t_card_replacement
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cardnoOld != null  and cardnoOld != ''  ">cardno_old = #{cardnoOld},</if>
+            <if test="cardnoNew != null  and cardnoNew != ''  ">cardno_new = #{cardnoNew},</if>
+            <!--            <if test="operateTime != null  ">operate_time = #{operateTime},</if>-->
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(u.operate_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(u.operate_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            <if test="operator != null  and operator != ''  ">operator = #{operator},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTCardReplacementById" parameterType="Integer">
+        delete from t_card_replacement where id = #{id}
+    </delete>
+
+    <delete id="deleteTCardReplacementByIds" parameterType="String">
+        delete from t_card_replacement where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+</mapper>

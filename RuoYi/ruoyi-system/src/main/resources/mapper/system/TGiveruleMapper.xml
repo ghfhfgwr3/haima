@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TGiveruleMapper">
+
+    <resultMap type="TGiverule" id="TGiveruleResult">
+        <result property="id" column="id"/>
+        <result property="companyid" column="companyid"/>
+        <result property="cardtype" column="cardtype"/>
+        <result property="beginMoney" column="begin_money"/>
+        <result property="andMoney" column="and_money"/>
+        <result property="giveType" column="give_type"/>
+        <result property="giveMoney" column="give_money"/>
+        <result property="beginDate" column="begin_date"/>
+        <result property="andDate" column="and_date"/>
+        <result property="givePxs" column="give_pxs"/>
+        <result property="ljType" column="lj_type"/>
+        <result property="giveCount" column="give_count"/>
+        <result property="yxts" column="yxts"/>
+        <result property="perCentage" column="percentage"/>
+        <association property="sysDept" column="dept_id" javaType="com.ruoyi.system.domain.SysDept"
+                     resultMap="deptResult"/>
+        <association property="tMemberType" column="companyid" javaType="com.ruoyi.system.domain.TMemberType"
+                     resultMap="TMemberTypeResult"/>
+
+    </resultMap>
+
+    <resultMap id="deptResult" type="SysDept">
+        <id property="deptId" column="dept_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="status" column="dept_status"/>
+    </resultMap>
+    <resultMap id="TMemberTypeResult" type="TMemberType">
+        <result property="id" column="id"/>
+        <result property="companyid" column="companyid"/>
+        <result property="memberTypeName" column="member_type_name"/>
+        <result property="discount" column="discount"/>
+        <result property="points_rule" column="points_rule"/>
+
+    </resultMap>
+
+    <sql id="selectTGiveruleVo">
+        select tg.id, tg.cardtype, tg.begin_money, tg.and_money,
+        tg.give_type, tg.give_money, tg.begin_date, tg.and_date,
+        tg.give_pxs, tg.lj_type, tg.give_count, tg.yxts,tg.percentage,
+        d.dept_name,mty.*
+        from t_giverule tg,sys_dept d,t_member_type mty
+    </sql>
+
+    <select id="selectTGiveruleList" parameterType="TGiverule" resultMap="TGiveruleResult">
+        <include refid="selectTGiveruleVo"/>
+        <where>
+            <if test="id != null ">and id = #{id}</if>
+            <if test="cardtype != null ">and cardtype = #{cardtype}</if>
+            <if test="companyid != null ">and companyid = #{companyid}</if>
+            <if test="beginMoney != null ">and begin_money = #{beginMoney}</if>
+            <if test="andMoney != null ">and and_money = #{andMoney}</if>
+            <if test="giveType != null ">and give_type = #{giveType}</if>
+            <if test="giveMoney != null ">and give_money = #{giveMoney}</if>
+            <if test="beginDate != null  and beginDate != '' ">and begin_date = #{beginDate}</if>
+            <if test="andDate != null  and andDate != '' ">and and_date = #{andDate}</if>
+            <if test="givePxs != null  and givePxs != '' ">and give_pxs = #{givePxs}</if>
+            <if test="ljType != null ">and lj_type = #{ljType}</if>
+            <if test="giveCount != null ">and give_count = #{giveCount}</if>
+            <if test="yxts != null ">and yxts = #{yxts}</if>
+            <if test="perCentage != null ">and percentage = #{perCentage}</if>
+            and tg.companyid = d.dept_id and tg.cardtype = mty.id
+        </where>
+    </select>
+
+    <select id="selectTGiveruleById" parameterType="Integer" resultMap="TGiveruleResult">
+        <include refid="selectTGiveruleVo"/>
+        where tg.id = #{id} and tg.companyid = d.dept_id and tg.cardtype = mty.id
+    </select>
+
+    <select id="selectTGiveruleByCompanyidAndCardType" parameterType="Integer" resultMap="TGiveruleResult">
+        <include refid="selectTGiveruleVo"/>
+        where tg.companyid = #{companyid} and tg.cardtype = #{cardtype} and tg.companyid = d.dept_id and tg.cardtype =
+        mty.id
+    </select>
+
+    <insert id="insertTGiverule" parameterType="TGiverule" useGeneratedKeys="true" keyProperty="id">
+        insert into t_giverule
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cardtype != null  ">cardtype,</if>
+            <if test="companyid != null  ">companyid,</if>
+            <if test="beginMoney != null  ">begin_money,</if>
+            <if test="andMoney != null  ">and_money,</if>
+            <if test="giveType != null  ">give_type,</if>
+            <if test="giveMoney != null  ">give_money,</if>
+            <if test="beginDate != null  and beginDate != ''  ">begin_date,</if>
+            <if test="andDate != null  and andDate != ''  ">and_date,</if>
+            <if test="givePxs != null  and givePxs != ''  ">give_pxs,</if>
+            <if test="ljType != null  ">lj_type,</if>
+            <if test="giveCount != null  ">give_count,</if>
+            <if test="yxts != null  ">yxts,</if>
+            <if test="perCentage != null  ">percentage,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cardtype != null  ">#{cardtype},</if>
+            <if test="companyid != null  ">#{companyid},</if>
+            <if test="beginMoney != null  ">#{beginMoney},</if>
+            <if test="andMoney != null  ">#{andMoney},</if>
+            <if test="giveType != null  ">#{giveType},</if>
+            <if test="giveMoney != null  ">#{giveMoney},</if>
+            <if test="beginDate != null  and beginDate != ''  ">#{beginDate},</if>
+            <if test="andDate != null  and andDate != ''  ">#{andDate},</if>
+            <if test="givePxs != null  and givePxs != ''  ">#{givePxs},</if>
+            <if test="ljType != null  ">#{ljType},</if>
+            <if test="giveCount != null  ">#{giveCount},</if>
+            <if test="yxts != null  ">#{yxts},</if>
+            <if test="perCentage != null  ">#{perCentage},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTGiverule" parameterType="TGiverule">
+        update t_giverule
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cardtype != null  ">cardtype = #{cardtype},</if>
+            <if test="companyid != null  ">companyid = #{companyid},</if>
+            <if test="beginMoney != null  ">begin_money = #{beginMoney},</if>
+            <if test="andMoney != null  ">and_money = #{andMoney},</if>
+            <if test="giveType != null  ">give_type = #{giveType},</if>
+            <if test="giveMoney != null  ">give_money = #{giveMoney},</if>
+            <if test="beginDate != null  and beginDate != ''  ">begin_date = #{beginDate},</if>
+            <if test="andDate != null  and andDate != ''  ">and_date = #{andDate},</if>
+            <if test="givePxs != null  and givePxs != ''  ">give_pxs = #{givePxs},</if>
+            <if test="ljType != null  ">lj_type = #{ljType},</if>
+            <if test="giveCount != null  ">give_count = #{giveCount},</if>
+            <if test="yxts != null  ">yxts = #{yxts},</if>
+            <if test="perCentage != null  ">percentage = #{perCentage},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTGiveruleById" parameterType="Integer">
+        delete from t_giverule where id = #{id}
+    </delete>
+
+    <delete id="deleteTGiveruleByIds" parameterType="String">
+        delete from t_giverule where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

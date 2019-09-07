@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改会员')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-tMember-edit" th:object="${tMember}">
+        <!--<input name="deptId" type="hidden" id="treeId"/>-->
+        <input id="id" name="id" th:field="*{id}" type="hidden">
+        <input name="deptId" type="hidden" th:field="*{companyid}" id="treeId"/>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">公司名称：</label>
+            <!--<div class="col-sm-8">
+                <input id="companyid" name="companyid" th:field="*{companyid}" class="form-control" type="text">
+            </div>-->
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <input class="form-control" type="text" name="companyid" id="companyid" readonly="true"
+                           th:field="*{sysDept.deptName}">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                </div>
+            </div>
+            <!--</div>
+            <div class="form-group">	-->
+            <!--<label class="col-sm-2 control-label">会员类型 ：</label>
+            <div class="col-sm-3">
+                <input id="memberTypeId" name="memberTypeId" th:field="*{memberTypeId}" class="form-control" type="text">
+            </div>-->
+            <label class="col-sm-2 control-label">会员类型：</label>
+
+            <div class="col-sm-3">
+                <!--<input id="memberTypeName" name="memberTypeId" type="hidden" th:field="*{tMemberType.memberTypeName}" class="form-control" type="text">
+--><!--th:field=  -->        <!-- "*{tMemberType.memberTypeName}"-->
+                <select name="memberTypeId" class="form-control m-b" id="memberTypeName">
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">会员卡号：</label>
+            <div class="col-sm-3">
+                <input id="memberNo" name="memberNo" th:field="*{memberNo}" class="form-control" type="text"
+                       readonly="readonly">
+            </div>
+            <!--</div>
+            <div class="form-group">	-->
+            <label class="col-sm-2 control-label">会员卡ID：</label>
+            <div class="col-sm-3">
+                <input id="cardid" name="cardid" th:field="*{cardid}" class="form-control" type="text"
+                       readonly="readonly">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">会员卡密码：</label>
+            <div class="col-sm-3">
+                <input id="password" name="password" th:field="*{password}" class="form-control" type="text"
+                       readonly="readonly">
+            </div>
+            <!--</div>
+            <div class="form-group">-->
+            <label class="col-sm-2 control-label">有效期：</label>
+            <div class="col-sm-3">
+                <input id="expirydate" name="expirydate" th:field="*{expirydateStr}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">会员姓名：</label>
+            <div class="col-sm-3">
+                <input id="memberName" name="memberName" th:field="*{memberName}" class="form-control" type="text">
+            </div>
+            <!--</div>
+            <div class="form-group">	-->
+            <label class="col-sm-2 control-label">会员电话：</label>
+            <div class="col-sm-3">
+                <input id="mobilephones" name="mobilephones" th:field="*{mobilephones}" class="form-control"
+                       type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">卡现有余额：</label>
+            <div class="col-sm-3">
+                <input id="balance" name="balance" th:field="*{balance}" class="form-control" type="text"
+                       readonly="readonly">
+            </div>
+            <!--</div>
+            <div class="form-group">	-->
+            <label class="col-sm-2 control-label">奖励金额：</label>
+            <div class="col-sm-3">
+                <input id="complimentaryMoney" name="complimentaryMoney" th:field="*{complimentaryMoney}"
+                       class="form-control" type="text" readonly="readonly">
+            </div>
+        </div>
+        <!--	<div class="form-group">
+                <label class="col-sm-3 control-label">是否有计次品相：</label>
+                <div class="col-sm-8">
+                    <input id="haveCount" name="haveCount" th:field="*{haveCount}" class="form-control" type="text">
+                </div>
+            </div>-->
+        <div class="form-group">
+            <label class="col-sm-2 control-label">是否有计次品相：</label>
+            <div class="col-sm-3">
+                <label class="toggle-switch switch-solid">
+                    <input type="checkbox" id="haveCount" th:checked="${tMember.haveCount == 0 ? true : false}">
+                    <span></span>
+                </label>
+            </div>
+            <!--</div>
+            <div class="form-group">-->
+            <label class="col-sm-2 control-label">挂失状态：</label>
+            <div class="col-sm-3">
+                <label class="toggle-switch switch-solid">
+                    <input type="checkbox" id="isloss" th:checked="${tMember.isloss == 0 ? true : false}">
+                    <span></span>
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">注销状态：</label>
+            <div class="col-sm-3">
+                <label class="toggle-switch switch-solid">
+                    <input type="checkbox" id="state" th:checked="${tMember.state == 0 ? true : false}">
+                    <span></span>
+                </label>
+            </div>
+            <!--	</div>
+                <div class="form-group">-->
+            <label class="col-sm-2 control-label">办卡时间：</label>
+            <div class="col-sm-3">
+                <input id="addDatetime" name="addDatetime" th:field="*{addDatetimeStr}" class="form-control" type="text"
+                       readonly="readonly">
+            </div>
+        </div>
+        <!--<div class="form-group">
+            <label class="col-sm-3 control-label">挂失状态：</label>
+            <div class="col-sm-8">
+                <input id="isloss" name="isloss" th:field="*{isloss}" class="form-control" type="text">
+            </div>
+        </div>-->
+
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">积分：</label>
+            <div class="col-sm-3">
+                <input id="points" name="points" th:field="*{points}" class="form-control" type="text"
+                       readonly="readonly">
+            </div>
+            <!--	</div>
+
+                <div class="form-group">	-->
+            <label class="col-sm-2 control-label">手续费：</label>
+            <div class="col-sm-3">
+                <input id="commission" name="commission" th:field="*{commission}" class="form-control" type="text"
+                       readonly="readonly">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">性别：</label>
+            <div class="col-sm-3">
+                <input id="sex" name="sex" th:field="*{sex}" class="form-control" type="text">
+            </div>
+            <!--</div>
+            <div class="form-group">-->
+            <label class="col-sm-2 control-label">会员生日：</label>
+            <div class="col-sm-3">
+                <input id="birtdate" name="birtdate" th:field="*{birtdateStr}" class="form-control" type="text"
+                       readonly="readonly">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">国家：</label>
+            <div class="col-sm-3">
+                <input id="nation" name="nation" th:field="*{nation}" class="form-control" type="text">
+            </div>
+            <!--</div>
+            <div class="form-group">	-->
+            <label class="col-sm-2 control-label">血型：</label>
+            <div class="col-sm-3">
+                <input id="blood" name="blood" th:field="*{blood}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">身高：</label>
+            <div class="col-sm-3">
+                <input id="stature" name="stature" th:field="*{stature}" class="form-control" type="text">
+            </div>
+            <!--	</div>
+                <div class="form-group">	-->
+            <label class="col-sm-2 control-label">体重：</label>
+            <div class="col-sm-3">
+                <input id="weight" name="weight" th:field="*{weight}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">职业：</label>
+            <div class="col-sm-3">
+                <input id="carrer" name="carrer" th:field="*{carrer}" class="form-control" type="text">
+            </div>
+            <!--</div>
+            <div class="form-group">	-->
+            <label class="col-sm-2 control-label">教育程度：</label>
+            <div class="col-sm-3">
+                <input id="education" name="education" th:field="*{education}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">ID卡号：</label>
+            <div class="col-sm-3">
+                <input id="iDcardno" name="iDcardno" th:field="*{iDcardno}" class="form-control" type="text">
+            </div>
+            <!--</div>
+            <div class="form-group">	-->
+            <label class="col-sm-2 control-label">电话：</label>
+            <div class="col-sm-3">
+                <input id="telephone" name="telephone" th:field="*{telephone}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">电子邮件：</label>
+            <div class="col-sm-3">
+                <input id="email" name="email" th:field="*{email}" class="form-control" type="text">
+            </div>
+            <!--</div>
+            <div class="form-group">-->
+            <label class="col-sm-2 control-label">邮编：</label>
+            <div class="col-sm-3">
+                <input id="postcode" name="postcode" th:field="*{postcode}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">地址：</label>
+            <div class="col-sm-8" id="distpicker3">
+                <select name="province"></select>
+                <select name="city"></select>
+                <select name="area"></select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">详细地址：</label>
+            <div class="col-sm-8">
+                <input id="address" name="address" th:field="*{address}" class="form-control" type="text">
+            </div>
+        </div>
+        <!--	<div class="form-group">
+                <label class="col-sm-2 control-label">是否被补办过：</label>
+                <div class="col-sm-8">-->
+        <input id="ismakeup" name="ismakeup" th:field="*{ismakeup}" class="form-control" type="hidden"
+               readonly="readonly">
+        <!--	</div>
+        </div>-->
+
+        <!--<div class="form-group">
+            <label class="col-sm-3 control-label">省份：</label>
+            <div class="col-sm-8">
+                <input id="province" name="province" th:field="*{province}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">市：</label>
+            <div class="col-sm-8">
+                <input id="city" name="city" th:field="*{city}" class="form-control" type="text">
+            </div>
+        </div>-->
+        <div class="form-group">
+            <label class="col-sm-2 control-label">备注：</label>
+            <div class="col-sm-8">
+                <input id="memo" name="memo" th:field="*{memo}" class="form-control" type="text">
+            </div>
+        </div>
+        <!--<div class="form-group">
+            <label class="col-sm-3 control-label">区：</label>
+            <div class="col-sm-8">
+                <input id="area" name="area" th:field="*{area}" class="form-control" type="text">
+            </div>
+        </div>-->
+    </form>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript">
+    /*	var name=$("#memberTypeName").val();*/
+    var prefix = ctx + "system/tMember";
+    var prefix2 = ctx + "system/dept"
+    var prefix3 = ctx + "system/tMemberType"
+    $("#form-tMember-edit").validate({
+        rules: {
+            xxxx: {
+                required: true,
+            },
+        },
+        focusCleanup: true
+    });
+
+    $(function () {
+        var id = $("#id").val();
+        $.ajax({
+            url: prefix + "/SelectById",
+            data: {"id": id},
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                console.log(data)
+                $("#memberTypeName").append("<option value='" + data.memberTypeId + "'>" + data.tMemberType.memberTypeName + "</option>");
+                /*<option > </option>*/
+            }
+        });
+    })
+
+
+    function submitHandler() {
+        if ($("#memberTypeName").val() != '') {
+            if ($.validate.form()) {
+                var data = $('#form-tMember-edit').serializeArray();
+                var isloss = $("input[id='isloss']").is(':checked') == true ? 0 : 1;
+                var state = $("input[id='state']").is(':checked') == true ? 0 : 1;
+                data.push({"name": "isloss", "value": isloss});
+                data.push({"name": "state", "value": state});
+                $.operate.save(prefix + "/edit", data);
+            }
+        }
+    }
+
+    $("#distpicker3").distpicker({
+        province: "河北省",
+        city: "石家庄市",
+        district: "裕华区"
+    });
+
+    /*用户管理-修改-选择部门树*/
+    function selectDeptTree() {
+        var deptId = $.common.isEmpty($("#treeId").val()) ? "100" : $("#treeId").val();
+        var url = ctx + "system/dept/selectDeptTree/" + deptId;
+        var options = {
+            title: '选择部门',
+            width: "380",
+            url: url,
+            callBack: doSubmit
+        };
+        $.modal.openOptions(options);
+    }
+
+    function doSubmit(index, layero) {
+        var tree = layero.find("iframe")[0].contentWindow.$._tree;
+        if ($.tree.notAllowParents(tree)) {
+            var body = layer.getChildFrame('body', index);
+            $("#treeId").val(body.find('#treeId').val());
+            $("#companyid").val(body.find('#treeName').val());
+            layer.close(index);
+            listTypeName();
+        }
+    }
+
+    /* 用户状态显示 */
+    function statusTools(row) {
+        if (row.state == 1) {
+            return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.id + '\')"></i> ';
+        } else {
+            return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.id + '\')"></i> ';
+        }
+    }
+
+    /* 用户管理-停用 */
+    function disable(id) {
+        var isloss = $("input[id='isloss']").is(':checked') == true ? 0 : 1;
+        if (isloss == 0) {
+            /*alert("");*/
+            $.modal.msgWarning("请先挂失该卡片！");
+            return;
+        } else if (isloss == 0) {
+            $.modal.confirm("确认要注销该卡片吗？", function () {
+                $.operate.post(prefix + "/changeLossStatus", {"id": id, "isloss": 1});
+            })
+        }
+    }
+
+    /* 用户管理启用 */
+    function enable(id) {
+        $.modal.confirm("确认要启用用户吗？", function () {
+            $.operate.post(prefix + "/changeLossStatus", {"id": id, "isloss": 0});
+        })
+    }
+
+    /*$("#memberTypeName").append("<option th:selected='"+memberTypeNameId+"' value='"+memberTypeNameId+"'>"+memberTypeName+"</option>");*/
+    function listTypeName() {
+        /*$("#memberTypeName").html("");
+        var memberTypeName =  $("#memberTypeName").html();
+        var memberTypeNameId =  $("#memberTypeName").val();*/
+        $("#memberTypeName").html("");
+        $("#memberTypeName").append("<option value=''>请选择卡类型</option>");
+        var id = $("#treeId").val();
+        $.post(prefix3 + "/TypeName", {"id": id}, function (date) {
+            $("#memberTypeName").html("");
+            $("#memberTypeName").append("<option value=''>会员卡类型</option>");
+            $("#memberTypeName").append("<option th:selected='" + memberTypeNameId + "' value='" + memberTypeNameId + "'>" + memberTypeName + "</option>");
+            for (var i = 0; i < date.length; i++) {
+
+                $("#memberTypeName").append("<option th:selected='" + date[i].id + "'  value='" + date[i].id + "'>" + date[i].memberTypeName + "</option>");
+            }
+        });
+    }
+
+
+</script>
+</body>
+</html>

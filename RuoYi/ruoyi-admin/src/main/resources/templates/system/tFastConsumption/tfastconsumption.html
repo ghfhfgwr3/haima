@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <th:block th:include="include :: header('快速消费')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <h4>搜索条件</h4>
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            会员卡号：<input type="text" name="memberNo" id="member" value=""/>
+                        </li>
+                        <li>
+                            手机：<input type="text" name="mobilephones" id="phone" value=""/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="aa()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                        <!--<li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>-->
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-12 search-collapse">
+            <h4>会员信息</h4>
+            <form id="formId" class="form-horizontal m">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">公司名称：</label>
+                    <div class="col-sm-2">
+                        <input class="form-control" readonly="readonly" type="text" id="deptName">
+                    </div>
+                    <!--</div>
+                    <div class="form-group">	-->
+                    <label class="col-sm-2 control-label">会员卡号：</label>
+                    <div class="col-sm-2">
+                        <input class="form-control" readonly="readonly" type="text" id="memberNo">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">会员姓名：</label>
+                    <div class="col-sm-2">
+                        <input class="form-control" readonly="readonly" type="text" id="memberName">
+                    </div>
+                    <!--</div>
+                    <div class="form-group">	-->
+                    <label class="col-sm-2 control-label">会员电话：</label>
+                    <div class="col-sm-2">
+                        <input class="form-control" readonly="readonly" type="text" id="mobilephones">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">会员余额：</label>
+                    <div class="col-sm-2">
+                        <input class="form-control" readonly="readonly" type="text" id="yue">
+                    </div>
+                    <!--</div>
+                    <div class="form-group">	-->
+                    <label class="col-sm-2 control-label">会员类型：</label>
+                    <div class="col-sm-2">
+                        <input class="form-control" readonly="readonly" type="text" id="memberTypeName">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">会员折扣：</label>
+                    <div class="col-sm-2">
+                        <input class="form-control" readonly="readonly" type="text" id="discount">
+                    </div>
+
+                    <label class="col-sm-2 control-label">会员积分：</label>
+                    <div class="col-sm-2">
+                        <input class="form-control" readonly="readonly" type="text" id="points">
+                    </div>
+
+                </div>
+                <div class="form-group" visibility:hidden>
+                    <label class="col-sm-2 control-label">积分规则：</label>
+                    <div class="col-sm-2">
+                        <input class="form-control" readonly="readonly" type="text" id="points_rule">
+                    </div>
+                </div>
+                <input id="max_consume" name="max_consume" type="hidden"/>
+            </form>
+        </div>
+        <div class="col-sm-12 search-collapse">
+            <h4>消费</h4>
+            <form id="formId" class="form-horizontal m">
+                <div class="select-list">
+                    <!--<ul>-->
+                    <div class="form-group">
+                        <li>
+                            消费金额：<input type="text" name="balance" id="balance" onchange="HeJi();"
+                                        onkeyup="checknum(this)"/>元
+                        </li>
+
+
+                    </div>
+                    <div class="form-group">
+                        <li>
+                            实付金额：<input type="text" name="realmoney" id="realmoney" readonly="readonly"
+                                        onkeyup="checknum(this)"/><span>元</span>
+                        </li>
+                    </div>
+                </div>
+            </form>
+            <a class="btn btn-primary btn-edit " onclick="consume(0)"
+               shiro:hasPermission="system:tfastconsumption:money">
+                <i class="fa fa-edit"></i> 付款
+            </a>
+        </div>
+        <!--<div class="btn-group-sm" id="toolbar" role="group">
+
+
+            <a class="btn btn-primary btn-edit disabled" onclick="remove(1)" shiro:hasPermission="system:tfastconsumption:money">
+                <i class="fa fa-edit"></i> 付款
+            </a>
+
+
+            <a class="btn btn-primary btn-edit disabled" onclick="remove(0)" shiro:hasPermission="system:tfastconsumption:money">
+                <i class="fa fa-edit"></i> 退款
+            </a>
+                <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:tfastconsumption:edit">
+                <i class="fa fa-edit"></i> 补卡
+                </a>
+                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+
+
+        </div>-->
+        <!--<div class="col-sm-6 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true">
+
+            </table>
+        </div>-->
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "system/tfastconsumption";
+    var prefix2 = ctx + "system/tMember";
+    var prefix3 = ctx + "system/recharge";
+    var editFlag = [[${@permission.hasPermi('system:tfastconsumption:edit')}]];
+
+    function consume(m) {
+        //var max_consume=$("#max_consume").val();//最大消费
+
+        var yue = $("#yue").val();//卡余额
+        var realmoney = $("#realmoney").val();//实付金额
+        var points_rule = $("#points_rule").val();//积分规则
+        var drealmoney = parseFloat(realmoney);
+        var dpoints_rule = parseFloat(points_rule);
+        var points1 = parseFloat($("#points").val());//原有积分
+        var points = points1 + (drealmoney / dpoints_rule);//本次积分
+
+        var totalmoney = $("#balance").val();//实付金额
+        var memberTypeName = $("#memberTypeName").val();//实付金额
+        var mobilephones = $("#mobilephones").val();//实付金额
+        var memberNo = $("#memberNo").val();
+        var phone = $("input[id='phone']").val();
+
+        if (memberNo == null || memberNo == "") {
+            $.modal.alertWarning("请检查卡号是否存在！");
+
+        } else if (realmoney == null || realmoney == "") {
+            $.modal.alertWarning("请输入消费金额！");
+        } else {
+            var max_consume = Number($("#max_consume").val());//最大消费
+            var yue = Number($("#yue").val());
+            var realmoney = Number($("#realmoney").val());
+            if (max_consume < realmoney) {
+                $.modal.alertWarning("消费金额超出最大消费限制!");
+            } else if (yue < realmoney) {
+                $.modal.alertWarning("余额不足请充值!");
+            } else {
+
+                $.modal.confirm("确认要消费吗？", function () {
+                    $.operate.post(prefix + "/update", {
+                        "memberNo": $("#member").val(),
+                        "mobilephones": mobilephones,
+                        "totalmoney": totalmoney,
+                        "balance": $("#realmoney").val(),
+                        "points": points,
+                        "m": m,
+                        "cardType": memberTypeName
+                    });
+                })
+
+            }
+        }
+
+
+    }
+
+    function checknum(obj) {
+
+        obj.value = obj.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+        obj.value = obj.value.replace(/^\./g, "");  //验证第一个字符是数字而不是.
+        obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的.
+        obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+
+        //$("#balance").val(Number(obj.value).val().toFixed(2));
+        HeJi();
+
+
+    }
+
+    function HeJi() {
+        $("#realmoney").val(Number($("#balance").val()) * Number($("#discount").val() * 0.1).toFixed(2));
+    }
+
+    function aa() {
+        var menmberno = $("#member").val();
+        var phone = $("input[id='phone']").val();
+        if (menmberno == null || menmberno == "") {
+            $.modal.msgWarning("卡号不可为空！");
+        } else {
+            $.post(prefix3 + "/offTMember", {"memberNo": menmberno, "phone": phone}, function (date) {
+
+                if (date.memberNo == "000000") {
+                    $.modal.msgWarning("该卡片不存在！");
+                } else if (date.state == 1) {
+                    $.modal.msgWarning("此卡已注销，无法消费！");
+                } else if (date.isloss == 1) {
+                    $.modal.msgWarning("此卡已挂失，请先进行解失！");
+
+                } else {
+                    searchCard();
+                }
+            });
+        }
+    }
+
+    function searchCard() {
+        var menmberno = $("#member").val();
+        var phone = $("input[id='phone']").val();
+
+        $.ajax({
+            url: prefix + "/list",
+
+            data: {"memberNo": menmberno, "mobilephones": phone},
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+
+                var a = JSON.stringify(data);
+
+                var obj = JSON.parse(a);
+
+
+                if (obj.memberNo == "不存在") {
+                    $.modal.msgWarning("该卡片不存在！");
+
+                } else {
+
+                    $("#deptName").val(obj.sysDept.deptName);
+                    $("#memberNo").val(obj.memberNo);
+                    $("#yue").val(obj.balance);
+                    $("#memberName").val(obj.memberName);
+                    $("#points").val(obj.points);
+                    $("#mobilephones").val(obj.mobilephones);
+                    $("#memberTypeName").val(obj.tMemberType.memberTypeName);
+
+                    $("#discount").val(obj.tMemberType.discount);
+                    $("#points_rule").val(obj.tMemberType.points_rule);
+                    $("#max_consume").val(obj.tMemberType.maxConsume);
+
+                }
+            }
+        });
+
+    }
+
+</script>
+</body>
+</html>

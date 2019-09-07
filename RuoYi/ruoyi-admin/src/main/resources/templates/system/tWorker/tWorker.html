@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('员工列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            公司名称：<input type="text" name="sysDept.deptName"/>
+                        </li>
+
+                        <!--<li>
+                            账号：<input type="text" name="loginNo"/>
+                        </li>
+
+                        <li>
+                            密码：<input type="text" name="loginPassword"/>
+                        </li>-->
+
+                        <li>
+                            工名：<input type="text" name="workerName"/>
+                        </li>
+
+                        <!--<li>
+                            性别：<input type="text" name="workerSex"/>
+                        </li>
+
+                        <li>
+                            国家：<input type="text" name="nation"/>
+                        </li>
+
+                        <li>
+                            教育程度：<input type="text" name="education"/>
+                        </li>
+
+                        <li>
+                            家乡：<input type="text" name="homeTown"/>
+                        </li>
+
+                        <li>
+                            地址：<input type="text" name="address"/>
+                        </li>-->
+
+                        <!--<li>
+                            邮编：<input type="text" name="postcode"/>
+                        </li>
+-->
+                        <!--<li>
+                            ID卡号：<input type="text" name="iDCardno"/>
+                        </li>-->
+
+                        <!--	<li>
+                                电子邮件：<input type="text" name="email"/>
+                            </li>-->
+
+                        <!--<li>
+                            电话：<input type="text" name="telephone"/>
+                        </li>-->
+
+                        <li>
+                            手机：<input type="text" name="mobile"/>
+                        </li>
+
+                        <!--<li>
+                            薪水：<input type="text" name="salary"/>
+                        </li>
+
+                        <li>
+                            工龄：<input type="text" name="workAge"/>
+                        </li>-->
+
+                        <!--<li>
+                            是否离职：<input type="text" name="isLeave"/>
+                        </li>
+
+                        <li>
+                            入职时间：<input type="text" name="hiredate"/>
+                        </li>
+
+                        <li>
+                            离职日期：<input type="text" name="leavedate"/>
+                        </li>-->
+
+                        <!--<li>
+                            备注：<input type="text" name="memo"/>
+                        </li>-->
+
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add(100)" shiro:hasPermission="system:tWorker:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="system:tWorker:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="system:tWorker:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:tWorker:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:tWorker:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:tWorker:remove')}]];
+    var prefix = ctx + "system/tWorker";
+    var datas = [[${@dict.getType('sys_user_sex')}]];
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add/{id}",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "员工",
+            showExport: true,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    field: 'sysDept.deptName',
+                    title: '公司名称',
+                    sortable: true
+                },
+                {
+                    field: 'loginNo',
+                    title: '账号',
+                    sortable: true
+                },
+                {
+                    field: 'loginPassword',
+                    title: '密码',
+                    sortable: true
+                },
+                {
+                    field: 'workerName',
+                    title: '工名',
+                    sortable: true
+                },
+                {
+                    field: 'workerSex',
+                    title: '性别',
+                    //sortable: true
+                    align: "left",
+                    formatter: function (value, item, index) {
+                        return $.table.selectDictLabel(datas, item.workerSex);
+                    }
+                },
+                // {
+                // 	field : 'nation',
+                // 	title : '国家',
+                // 	sortable: true
+                // },
+                {
+                    field: 'education',
+                    title: '教育程度',
+                    sortable: true
+                },
+                // {
+                // 	field : 'homeTown',
+                // 	title : '家乡',
+                // 	sortable: true
+                // },
+                // {
+                // 	field : 'address',
+                // 	title : '地址',
+                // 	sortable: true
+                // },
+                // {
+                // 	field : 'postcode',
+                // 	title : '邮编',
+                // 	sortable: true
+                // },
+                {
+                    field: 'iDCardno',
+                    title: 'ID卡号',
+                    sortable: true
+                },
+                {
+                    field: 'email',
+                    title: '电子邮件',
+                    sortable: true
+                },
+                // {
+                // 	field : 'telephone',
+                // 	title : '电话',
+                // 	sortable: true
+                // },
+                {
+                    field: 'mobile',
+                    title: '手机',
+                    sortable: true
+                },
+                // {
+                // 	field : 'salary',
+                // 	title : '薪水',
+                // 	sortable: true
+                // },
+                // {
+                // 	field : 'workAge',
+                // 	title : '工龄',
+                // 	sortable: true
+                // },
+                {
+                    visible: editFlag == 'hidden' ? false : true,
+                    title: '是否离职',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return stateLeave(row);
+                    }
+                }
+                // {
+                // 	field : 'isLeave',
+                // 	title : '是否离职',
+                // 	sortable: true
+                // }
+                ,
+                {
+                    field: 'hiredate',
+                    title: '入职时间',
+                    sortable: true
+                },
+                {
+                    field: 'leavedate',
+                    title: '离职日期',
+                    sortable: true
+                },
+                // {
+                // 	field : 'memo',
+                // 	title : '备注',
+                // 	sortable: true
+                // },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    /* 是否离职 */
+    function stateLeave(row) {
+        if (row.isLeave == 1) {
+            return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enablestate(\'' + row.id + '\',\'' + row.isLeave + '\')"></i> ';
+        } else {
+            return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disablestate(\'' + row.id + '\',\'' + row.isLeave + '\')"></i> ';
+        }
+    }
+
+    /* 启用员工 */
+    function enablestate(id, isLeave) {
+        $.modal.confirm("确认在职？", function () {
+
+            $.operate.post(prefix + "/changeIsLeave", {"id": id, "isLeave": 0});
+
+
+        })
+    }
+
+    /* 解雇员工 */
+    function disablestate(id, isLeave) {
+        $.modal.confirm("确认离职？", function () {
+
+            $.operate.post(prefix + "/changeIsLeave", {"id": id, "isLeave": 1});
+
+        })
+    }
+</script>
+</body>
+</html>

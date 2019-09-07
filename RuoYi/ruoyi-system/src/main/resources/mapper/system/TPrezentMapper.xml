@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TPrezentMapper">
+
+    <resultMap type="TPrezent" id="TPrezentResult">
+        <result property="id" column="id"/>
+        <result property="companyid" column="companyid"/>
+        <result property="prezentBh" column="prezent_bh"/>
+        <result property="prezentName" column="prezent_name"/>
+        <result property="prezentTotalnum" column="prezent_totalnum"/>
+        <result property="prezentRemain" column="prezent_remain"/>
+        <result property="prezentImg" column="prezent_img"/>
+        <result property="cent" column="cent"/>
+        <result property="oprator" column="oprator"/>
+        <result property="state" column="state"/>
+        <result property="createDate" column="create_date"/>
+        <result property="beginDate" column="begin_date"/>
+        <result property="endDate" column="end_date"/>
+        <association property="sysDept" column="dept_id" javaType="com.ruoyi.system.domain.SysDept"
+                     resultMap="deptResult"/>
+    </resultMap>
+
+    <resultMap id="deptResult" type="SysDept">
+        <id property="deptId" column="dept_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="status" column="dept_status"/>
+    </resultMap>
+
+
+    <sql id="selectTPrezentVo">
+        select tp.id, tp.companyid, tp.prezent_bh, tp.prezent_name,
+        tp.prezent_totalnum, tp.prezent_remain, tp.prezent_img, tp.cent, tp.oprator, tp.state,
+        tp.create_date, tp.begin_date, tp.end_date,d.dept_name
+        from t_prezent tp,sys_dept d
+    </sql>
+
+    <select id="selectTPrezentList" parameterType="TPrezent" resultMap="TPrezentResult">
+        <include refid="selectTPrezentVo"/>
+        <where>
+            <if test="id != null ">and id = #{id}</if>
+            <if test="companyid != null ">and companyid = #{companyid}</if>
+            <if test="prezentBh != null  and prezentBh != '' ">and prezent_bh = #{prezentBh}</if>
+            <if test="prezentName != null  and prezentName != '' ">and prezent_name = #{prezentName}</if>
+            <if test="prezentTotalnum != null ">and prezent_totalnum = #{prezentTotalnum}</if>
+            <if test="prezentRemain != null ">and prezent_remain = #{prezentRemain}</if>
+            <if test="prezentImg != null  and prezentImg != '' ">and prezent_img = #{prezentImg}</if>
+            <if test="cent != null ">and cent = #{cent}</if>
+            <if test="oprator != null  and oprator != '' ">and oprator = #{oprator}</if>
+            <if test="state != null ">and state = #{state}</if>
+            <if test="createDate != null ">and create_date = #{createDate}</if>
+            <if test="beginDate != null ">and begin_date = #{beginDate}</if>
+            <if test="endDate != null ">and end_date = #{endDate}</if>
+            ${params.dataScope}
+            and tp.companyid = d.dept_id order by id desc
+        </where>
+
+    </select>
+
+    <select id="selectTPrezentById" parameterType="Long" resultMap="TPrezentResult">
+        <include refid="selectTPrezentVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTPrezent" parameterType="TPrezent" useGeneratedKeys="true" keyProperty="id">
+        insert into t_prezent
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="companyid != null  ">companyid,</if>
+            <if test="prezentBh != null  and prezentBh != ''  ">prezent_bh,</if>
+            <if test="prezentName != null  and prezentName != ''  ">prezent_name,</if>
+            <if test="prezentTotalnum != null  ">prezent_totalnum,</if>
+            <if test="prezentRemain != null  ">prezent_remain,</if>
+            <if test="prezentImg != null  and prezentImg != ''  ">prezent_img,</if>
+            <if test="cent != null  ">cent,</if>
+            <if test="oprator != null  and oprator != ''  ">oprator,</if>
+            <if test="state != null  ">state,</if>
+            <!--	<if test="createDate != null  ">create_date,</if>-->
+            <if test="beginDate != null  ">begin_date,</if>
+            <if test="endDate != null  ">end_date,</if>
+            create_date
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="companyid != null  ">#{companyid},</if>
+            <if test="prezentBh != null  and prezentBh != ''  ">#{prezentBh},</if>
+            <if test="prezentName != null  and prezentName != ''  ">#{prezentName},</if>
+            <if test="prezentTotalnum != null  ">#{prezentTotalnum},</if>
+            <if test="prezentRemain != null  ">#{prezentRemain},</if>
+            <if test="prezentImg != null  and prezentImg != ''  ">#{prezentImg},</if>
+            <if test="cent != null  ">#{cent},</if>
+            <if test="oprator != null  and oprator != ''  ">#{oprator},</if>
+            <if test="state != null  ">#{state},</if>
+            <!--<if test="createDate != null  ">#{createDate},</if>-->
+            <if test="beginDate != null  ">#{beginDate},</if>
+            <if test="endDate != null  ">#{endDate},</if>
+            sysdate()
+        </trim>
+    </insert>
+
+    <update id="updateTPrezent" parameterType="TPrezent">
+        update t_prezent
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companyid != null  ">companyid = #{companyid},</if>
+            <if test="prezentBh != null  and prezentBh != ''  ">prezent_bh = #{prezentBh},</if>
+            <if test="prezentName != null  and prezentName != ''  ">prezent_name = #{prezentName},</if>
+            <if test="prezentTotalnum != null  ">prezent_totalnum = #{prezentTotalnum},</if>
+            <if test="prezentRemain != null  ">prezent_remain = #{prezentRemain},</if>
+            <if test="prezentImg != null  and prezentImg != ''  ">prezent_img = #{prezentImg},</if>
+            <if test="cent != null  ">cent = #{cent},</if>
+            <if test="oprator != null  and oprator != ''  ">oprator = #{oprator},</if>
+            <if test="state != null  ">state = #{state},</if>
+            <if test="createDate != null  ">create_date = #{createDate},</if>
+            <if test="beginDate != null  ">begin_date = #{beginDate},</if>
+            <if test="endDate != null  ">end_date = #{endDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTPrezentById" parameterType="Long">
+        delete from t_prezent where id = #{id}
+    </delete>
+
+    <delete id="deleteTPrezentByIds" parameterType="String">
+        delete from t_prezent where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="checkBhUnique" parameterType="TPrezent" resultType="int">
+        <!--<include refid="selectTMemberVo"/>-->
+        select count(1) from t_prezent where prezent_bh=#{prezentBh} and companyid=#{companyid}
+
+    </select>
+
+</mapper>

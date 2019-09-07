@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <th:block th:include="include :: header('')"/>
+</head>
+
+<body class="gray-bg">
+
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>补卡</h5>
+                </div>
+                <div class="container-div">
+                    <div class="row">
+                        <div class="col-sm-12 search-collapse">
+                            <form class="form-horizontal m" id="form-tMember-edit">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">旧卡号:</label>
+                                    <div class="col-sm-7">
+                                        <input id="memberNoOne" name="memberNoOne" class="form-control"
+                                               onkeyup="checknum(this)" type="text" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">新卡号:</label>
+                                    <div class="col-sm-7">
+                                        <input id="memberNoTwo" name="memberNoTwo" class="form-control"
+                                               onkeyup="checknum(this)" type="text" required>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="btn-group-sm" role="group">
+                                &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
+                                    class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="resetb()"><i
+                                        class="fa fa-refresh"></i>&nbsp;重置</a>
+                                <a class="btn btn-primary btn-edit btn-sm" onclick="submitBk()"
+                                   shiro:hasPermission="system:recharge:edit">
+                                    <i class="fa fa-edit"></i> 补卡
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "system/recharge";
+    $("#memberNoOne").blur(function () {
+        if ($("input[name='memberNoOne']").val() != "" && $("input[name='memberNoOne']").val() != null) {
+            $.ajax({
+                url: prefix + "/checkTMemberIslossUnique",
+                data: {"memberNo": $("input[name='memberNoOne']").val()},
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    alert(JSON.stringify(data));
+                    // console.log(data);
+                    if (data == 1) {
+                        $("input[id='memberNoOne']").val("此卡未挂失!")
+                    }
+                }
+            });
+        }
+    })
+
+    $("#memberNoTwo").blur(function () {
+        if ($("input[name='memberNoTwo']").val() != "" && $("input[name='memberNoTwo']").val() != null) {
+            $.ajax({
+                url: prefix + "/checkCardCount",
+                data: {"memberNo": $("input[name='memberNoTwo']").val()},
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    if (data == 1) {
+                        $("input[id='memberNoTwo']").val("此卡号重复！")
+                    }
+                }
+            });
+        }
+    })
+
+
+    function checknum(obj) {
+        obj.value = obj.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+        obj.value = obj.value.replace(/^\./g, "");  //验证第一个字符是数字而不是.
+        obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的.
+        obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+    }
+
+    function submitBk() {
+        if ($("input[name='memberNoTwo']").val() != "" && $("input[name='memberNoTwo']").val() != "此卡号重复！" && $("input[name='memberNoOne']").val() != "" && $("input[name='memberNoOne']").val() != "此卡未挂失") {
+            if ($.validate.form()) {
+                $.operate.post(prefix + "/edit", $('#form-tMember-edit').serialize());
+                resetb()
+            }
+        }
+    }
+
+    function resetb() {
+        $("input[name='memberNoOne']").val("");
+        $("input[name='memberNoTwo']").val("");
+    }
+</script>
+</body>
+</html>

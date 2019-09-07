@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TConsumerMachineMapper">
+    
+    <resultMap type="TConsumerMachine" id="TConsumerMachineResult">
+        <result property="id"    column="id"    />
+        <result property="shopInfo"    column="shop_info"    />
+        <result property="shopNum"    column="shop_num"    />
+        <result property="kalman"    column="kalman"    />
+        <result property="devMode"    column="dev_mode"    />
+        <result property="domain"    column="domain"    />
+        <result property="port"    column="port"    />
+        <result property="maxMoney"    column="max_money"    />
+        <result property="deposit"    column="deposit"    />
+        <result property="current"    column="current"    />
+        <result property="cardLabeling"    column="card_labeling"    />
+        <result property="discount"    column="discount"    />
+        <result property="cardType"    column="card_type"    />
+        <result property="devName"    column="dev_name"    />
+        <result property="file"    column="file"    />
+        <result property="path"    column="path"    />
+        <result property="account"    column="account"    />
+        <result property="pwd"    column="pwd"    />
+        <result property="devId"    column="dev_id"    />
+        <result property="time"    column="time"    />
+        <result property="state"    column="state"    />
+
+        <association property="sysDept" column="dept_id" javaType="com.ruoyi.system.domain.SysDept"
+                     resultMap="deptResult"/>
+        <association property="tMemberType" column="id" javaType="com.ruoyi.system.domain.TMemberType"
+                     resultMap="TMemberTypeResult"/>
+    </resultMap>
+    <resultMap id="deptResult" type="SysDept">
+        <id property="deptId" column="dept_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="companyNo" column="company_no"/>
+        <result property="status" column="dept_status"/>
+    </resultMap>
+
+    <resultMap id="TMemberTypeResult" type="TMemberType">
+        <result property="id" column="id"/>
+        <result property="companyid" column="companyid"/>
+        <result property="memberTypeName" column="member_type_name"/>
+        <result property="discount" column="discount"/>
+        <result property="points_rule" column="points_rule"/>
+        <result property="maxConsume" column="max_consume"/>
+        <result property="isRerurn" column="is_rerurn"/>
+        <result property="isEncourage" column="is_encourage"/>
+    </resultMap>
+	
+	<sql id="selectTConsumerMachineVo">
+        select tc.id, tc.shop_info, tc.shop_num, tc.kalman, tc.dev_mode, tc.domain , tc.port, tc.max_money, tc.deposit, tc.current, tc.card_labeling, tc.discount, tc.card_type, tc.dev_name,
+        tc.file, tc.path, tc.account, tc.pwd, tc.dev_id, tc.time ,tc.state,tm.member_type_name ,tm.discount as memberDiscount,d.dept_name
+        from t_consumer_machine tc,t_member_type tm ,sys_dept d
+    </sql>
+	
+    <select id="selectTConsumerMachineList" parameterType="TConsumerMachine" resultMap="TConsumerMachineResult">
+        <include refid="selectTConsumerMachineVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="shopInfo != null  and shopInfo != '' "> and shop_info = #{shopInfo}</if>
+             <if test="shopNum != null  and shopNum != '' "> and shop_num = #{shopNum}</if>
+             <if test="kalman != null  and kalman != '' "> and kalman = #{kalman}</if>
+             <if test="devMode != null  and devMode != '' "> and dev_mode = #{devMode}</if>
+             <if test="domain != null  and domain != '' "> and domain = #{domain}</if>
+             <if test="port != null  and port != '' "> and port = #{port}</if>
+             <if test="maxMoney != null  and maxMoney != '' "> and max_money = #{maxMoney}</if>
+             <if test="deposit != null  and deposit != '' "> and deposit = #{deposit}</if>
+             <if test="current != null  and current != '' "> and current = #{current}</if>
+             <if test="cardLabeling != null  and cardLabeling != '' "> and card_labeling = #{cardLabeling}</if>
+             <if test="discount != null  and discount != '' "> and discount = #{discount}</if>
+             <if test="cardType != null  and cardType != '' "> and card_type = #{cardType}</if>
+             <if test="devName != null  and devName != '' "> and dev_name = #{devName}</if>
+             <if test="file != null  and file != '' "> and file = #{file}</if>
+             <if test="path != null  and path != '' "> and path = #{path}</if>
+             <if test="account != null  and account != '' "> and account = #{account}</if>
+             <if test="pwd != null  and pwd != '' "> and pwd = #{pwd}</if>
+             <if test="devId != null  and devId != '' "> and dev_id = #{devId}</if>
+             <if test="time != null  and time != '' "> and time = #{time}</if>
+            <if test="state != null  and state != '' "> and state = #{state}</if>
+            and d.company_no = tc.shop_num and  tm.id = tc.card_type and tc.state = 1
+        </where>
+    </select>
+    
+    <select id="selectTConsumerMachineById" parameterType="Integer" resultMap="TConsumerMachineResult">
+        <include refid="selectTConsumerMachineVo"/>
+        where id = #{id}  and d.company_no = tc.shop_num and  tm.id = tc.card_type and tc.state = 1
+    </select>
+        
+    <insert id="insertTConsumerMachine" parameterType="TConsumerMachine" useGeneratedKeys="true" keyProperty="id">
+        insert into t_consumer_machine
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="shopInfo != null  and shopInfo != ''  ">shop_info,</if>
+			<if test="shopNum != null  and shopNum != ''  ">shop_num,</if>
+			<if test="kalman != null  and kalman != ''  ">kalman,</if>
+			<if test="devMode != null  and devMode != ''  ">dev_mode,</if>
+			<if test="domain != null  and domain != ''  ">domain,</if>
+			<if test="port != null  and port != ''  ">port,</if>
+			<if test="maxMoney != null  and maxMoney != ''  ">max_money,</if>
+			<if test="deposit != null  and deposit != ''  ">deposit,</if>
+			<if test="current != null  and current != ''  ">current,</if>
+			<if test="cardLabeling != null  and cardLabeling != ''  ">card_labeling,</if>
+			<if test="discount != null  and discount != ''  ">discount,</if>
+			<if test="cardType != null  and cardType != ''  ">card_type,</if>
+			<if test="devName != null  and devName != ''  ">dev_name,</if>
+			<if test="file != null  and file != ''  ">file,</if>
+			<if test="path != null  and path != ''  ">path,</if>
+			<if test="account != null  and account != ''  ">account,</if>
+			<if test="pwd != null  and pwd != ''  ">pwd,</if>
+			<if test="devId != null  and devId != ''  ">dev_id,</if>
+			<if test="time != null  and time != ''  ">time,</if>
+            <if test="state != null  and state != ''  ">state,</if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="shopInfo != null  and shopInfo != ''  ">#{shopInfo},</if>
+			<if test="shopNum != null  and shopNum != ''  ">#{shopNum},</if>
+			<if test="kalman != null  and kalman != ''  ">#{kalman},</if>
+			<if test="devMode != null  and devMode != ''  ">#{devMode},</if>
+			<if test="domain != null  and domain != ''  ">#{domain},</if>
+			<if test="port != null  and port != ''  ">#{port},</if>
+			<if test="maxMoney != null  and maxMoney != ''  ">#{maxMoney},</if>
+			<if test="deposit != null  and deposit != ''  ">#{deposit},</if>
+			<if test="current != null  and current != ''  ">#{current},</if>
+			<if test="cardLabeling != null  and cardLabeling != ''  ">#{cardLabeling},</if>
+			<if test="discount != null  and discount != ''  ">#{discount},</if>
+			<if test="cardType != null  and cardType != ''  ">#{cardType},</if>
+			<if test="devName != null  and devName != ''  ">#{devName},</if>
+			<if test="file != null  and file != ''  ">#{file},</if>
+			<if test="path != null  and path != ''  ">#{path},</if>
+			<if test="account != null  and account != ''  ">#{account},</if>
+			<if test="pwd != null  and pwd != ''  ">#{pwd},</if>
+			<if test="devId != null  and devId != ''  ">#{devId},</if>
+			<if test="time != null  and time != ''  ">#{time},</if>
+            <if test="state != null  and state != ''  ">#{state},</if>
+
+        </trim>
+    </insert>
+	 
+    <update id="updateTConsumerMachine" parameterType="TConsumerMachine">
+        update t_consumer_machine
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shopInfo != null  and shopInfo != ''  ">shop_info = #{shopInfo},</if>
+            <if test="shopNum != null  and shopNum != ''  ">shop_num = #{shopNum},</if>
+            <if test="kalman != null  and kalman != ''  ">kalman = #{kalman},</if>
+            <if test="devMode != null  and devMode != ''  ">dev_mode = #{devMode},</if>
+            <if test="domain != null  and domain != ''  ">domain = #{domain},</if>
+            <if test="port != null  and port != ''  ">port = #{port},</if>
+            <if test="maxMoney != null  and maxMoney != ''  ">max_money = #{maxMoney},</if>
+            <if test="deposit != null  and deposit != ''  ">deposit = #{deposit},</if>
+            <if test="current != null  and current != ''  ">current = #{current},</if>
+            <if test="cardLabeling != null  and cardLabeling != ''  ">card_labeling = #{cardLabeling},</if>
+            <if test="discount != null  and discount != ''  ">discount = #{discount},</if>
+            <if test="cardType != null  and cardType != ''  ">card_type = #{cardType},</if>
+            <if test="devName != null  and devName != ''  ">dev_name = #{devName},</if>
+            <if test="file != null  and file != ''  ">file = #{file},</if>
+            <if test="path != null  and path != ''  ">path = #{path},</if>
+            <if test="account != null  and account != ''  ">account = #{account},</if>
+            <if test="pwd != null  and pwd != ''  ">pwd = #{pwd},</if>
+            <if test="devId != null  and devId != ''  ">dev_id = #{devId},</if>
+            <if test="time != null  and time != ''  ">time = #{time},</if>
+            <if test="state != null  and state != ''  ">state= #{state},</if>
+
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteTConsumerMachineById" parameterType="Integer">
+        delete from t_consumer_machine where id = #{id}
+    </delete>
+	
+    <delete id="deleteTConsumerMachineByIds" parameterType="String">
+        delete from t_consumer_machine where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--===============通过设备ID查询机器设备信息-->
+    <select id="selectTConsumerMachineByMachineId" parameterType="String" resultMap="TConsumerMachineResult">
+        <include refid="selectTConsumerMachineVo"/>
+        where dev_id =#{devId} and d.company_no = tc.shop_num and  tm.id = tc.card_type
+
+    </select>
+</mapper>

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('会员列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            公司名称：<input type="text" name="sysDept.deptName"/>
+                        </li>
+                        <!--name="memberTypeId"-->
+
+                        <li>
+                            会员类型：<input type="text" name="tMemberType.memberTypeName"/>
+                        </li>
+
+                        <li>
+                            会员卡号：<input type="text" name="memberNo"/>
+                        </li>
+
+                        <!--<li>
+                            会员卡ID：<input type="text" name="cardid"/>
+                        </li>-->
+
+                        <!--<li>
+                            会员卡密码：<input type="text" name="password"/>
+                        </li>-->
+
+                        <!--	<li>
+                                会员姓名：<input type="text" name="memberName"/>
+                            </li>-->
+
+                        <li>
+                            会员电话：<input type="text" name="mobilephones"/>
+                        </li>
+
+                        <!--<li>
+                            卡现有余额：<input type="text" name="balance"/>
+                        </li>-->
+
+                        <!--<li>
+                            奖励金额：<input type="text" name="complimentaryMoney"/>
+                        </li>
+
+                        <li>
+                            是否有计次品相：<input type="text" name="haveCount"/>
+                        </li>-->
+
+
+                        <li class="select-time">
+                            <label>办卡时间： </label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                   name="params[beginTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                   name="params[endTime]"/>
+                        </li>
+                        <li>
+                            会员挂失：<select name="isloss" th:with="type=${@dict.getType('sys_member_loss')}">
+                            <option value="">所有</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                    th:value="${dict.dictValue}"></option>
+                        </select>
+                        </li>
+                        <li>
+                            会员状态：<select name="state" th:with="type=${@dict.getType('sys_member_state')}">
+                            <option value="">所有</option>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                    th:value="${dict.dictValue}"></option>
+                        </select>
+                        </li>
+                        <!--<li>
+                            是否为可用状态（0正常1已注销）：<input type="text" name="state"/>
+                        </li>-->
+
+                        <!--<li>
+                            积分：<input type="text" name="points"/>
+                        </li>
+-->
+                        <!--<li>
+                            有效期：<input type="text" name="expirydate"/>
+                        </li>
+
+                        <li>
+                            手续费：<input type="text" name="commission"/>
+                        </li>-->
+
+                        <!--	<li>
+                                出生日期：<input type="text" name="birtdate"/>
+                            </li>
+
+                            <li>
+                                性别：<input type="text" name="sex"/>
+                            </li>
+
+                            <li>
+                                国家：<input type="text" name="nation"/>
+                            </li>
+
+                            <li>
+                                血型：<input type="text" name="blood"/>
+                            </li>
+
+                            <li>
+                                身高：<input type="text" name="stature"/>
+                            </li>
+
+                            <li>
+                                体重：<input type="text" name="weight"/>
+                            </li>
+
+                            <li>
+                                职业：<input type="text" name="carrer"/>
+                            </li>
+
+                            <li>
+                                教育程度：<input type="text" name="education"/>
+                            </li>-->
+
+                        <!--<li>
+                            ID卡号：<input type="text" name="iDcardno"/>
+                        </li>-->
+
+                        <!--<li>
+                            电话：<input type="text" name="telephone"/>
+                        </li>-->
+
+                        <!--<li>
+                            电子邮件：<input type="text" name="email"/>
+                        </li>
+
+                        <li>
+                            地址：<input type="text" name="address"/>
+                        </li>
+
+                        <li>
+                            邮编：<input type="text" name="postcode"/>
+                        </li>
+
+                        <li>
+                            省份：<input type="text" name="province"/>
+                        </li>
+
+                        <li>
+                            市：<input type="text" name="city"/>
+                        </li>
+-->
+                        <!--<li>
+                            备注：<input type="text" name="memo"/>
+                        </li>-->
+
+                        <!--<li>
+                            区：<input type="text" name="area"/>
+                        </li>-->
+
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add(100)" shiro:hasPermission="system:tMember:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="system:tMember:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="system:tMember:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:tMember:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:tMember:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:tMember:remove')}]];
+    var datas = [[${@dict.getType('sys_member_state')}]];
+    var data_loss = [[${@dict.getType('sys_member_loss')}]];
+    var prefix = ctx + "system/tMember";
+
+    $(function () {
+        var options = {
+            code: "deptId",
+            parentCode: "parentId",
+            uniqueId: "deptId",
+            url: prefix + "/list",
+            createUrl: prefix + "/add/{id}",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "会员",
+            showExport: true,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    field: 'sysDept.deptName',
+                    title: '公司名称',
+                    sortable: true
+                },
+                {
+                    //field : 'memberTypeId',
+                    field: 'tMemberType.memberTypeName',
+                    title: '会员类型',
+                    sortable: true
+                },
+                {
+                    field: 'memberNo',
+                    title: '会员卡号',
+                    sortable: true
+                },
+                {
+                    field: 'cardid',
+                    title: '会员卡ID',
+                    sortable: true
+                },
+                {
+                    field: 'money',
+                    title: '总计',
+                    sortable: true
+                },
+                {
+                    field: 'balance',
+                    title: '充值金额',
+                    sortable: true
+                },
+                {
+                    field: 'complimentaryMoney',
+                    title: '奖励金额',
+                    sortable: true
+                },
+                {
+                    field: 'points',
+                    title: '积分',
+                    sortable: true
+                },
+                {
+                    field: 'commission',
+                    title: '手续费',
+                    sortable: true
+                },
+                {
+                    field: 'expirydate',
+                    title: '有效期',
+                    sortable: true
+                },
+                {
+                    visible: editFlag == 'hidden' ? false : true,
+                    title: '挂失',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    }
+                }
+                ,
+                {
+                    visible: editFlag == 'hidden' ? false : true,
+                    title: '注销',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return stateTools(row);
+                    }
+                }
+                /*,
+                {
+
+                        field: 'isloss',
+                        title: '挂失',
+                        align: "left",
+                        formatter: function(value, item, index) {
+                            return $.table.selectDictLabel(data_loss, item.isloss);
+                        }
+                    }*/
+                /*,
+                    {
+                        // field : 'state',
+                        // title : '状态（0正常1已注销）',
+                        // sortable: true
+                        field: 'state',
+                        title: '注销',
+                        align: "left",
+                        formatter: function(value, item, index) {
+                            return $.table.selectDictLabel(datas, item.state);
+                        }
+                    }*/,
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="editmember(\'' + row.id + '\',\'' + row.ismakeup + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="deletemember(\'' + row.id + '\',\'' + row.ismakeup + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    /* 会员挂失状态显示 */
+    function statusTools(row) {
+        if (row.isloss == 1) {
+            return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.id + '\',\'' + row.ismakeup + '\')"></i> ';
+        } else {
+            return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.id + '\')"></i> ';
+        }
+    }
+
+    /* 会员挂失状态管理-停用 */
+    function disable(id) {
+        $.modal.confirm("确认要挂失该卡片吗？", function () {
+            $.operate.post(prefix + "/changeLossStatus", {"id": id, "isloss": 1});
+        })
+    }
+
+    /* 角会员解失状态管理启用 */
+    function enable(id, ismakeup) {
+        if (ismakeup == 1) {
+            $.modal.msgWarning("该卡片被补办过，无法解失！");
+
+        } else {
+            $.modal.confirm("确认要解失该卡片吗？", function () {
+                $.operate.post(prefix + "/changeLossStatus", {"id": id, "isloss": 0});
+            })
+        }
+    }
+
+    /* 会员注销状态显示 */
+    function stateTools(row) {
+        if (row.state == 1) {
+            return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enablestate(\'' + row.id + '\',\'' + row.isloss + '\')"></i> ';
+        } else {
+            return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disablestate(\'' + row.id + '\',\'' + row.isloss + '\',\'' + row.ismakeup + '\')"></i> ';
+        }
+    }
+
+    /* 角色管理-停用 */
+    function enablestate(id, isloss) {
+
+        $.modal.msgWarning("注销的卡片不能再次启用！");
+    }
+
+    /* 角色管理启用 */
+    function disablestate(id, isloss, ismakeup) {
+        if (ismakeup == 1) {
+            $.modal.msgWarning("该卡片被补办过，无法注销！");
+        } else {
+
+            $.modal.confirm("确认要注销该卡片吗？", function () {
+
+                if (isloss == 0) {
+
+                    $.modal.msgWarning("先挂失再注销！");
+                } else if (isloss == 1) {
+                    $.operate.post(prefix + "/changeState", {"id": id, "state": 1});
+                }
+            })
+        }
+    }
+
+    /* 编辑会员 */
+    function editmember(id, ismakeup) {
+        if (ismakeup == 1) {
+            $.modal.msgWarning("该卡片已被补办过，无法启用该功能！");
+        } else {
+            $.operate.edit(id)
+        }
+
+    }
+
+    function deletemember(id, ismakeup) {
+        if (ismakeup == 1) {
+            $.modal.msgWarning("该卡片已被补办过，无法启用该功能！");
+        } else {
+            $.operate.remove(id)
+        }
+
+    }
+
+</script>
+</body>
+</html>

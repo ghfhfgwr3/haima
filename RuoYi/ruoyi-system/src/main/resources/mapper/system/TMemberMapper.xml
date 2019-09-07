@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TMemberMapper">
+
+    <resultMap type="TMember" id="TMemberResult">
+        <result property="id" column="id"/>
+        <result property="companyid" column="companyid"/>
+        <result property="memberTypeId" column="member_type_id"/>
+        <result property="memberNo" column="member_no"/>
+        <result property="cardid" column="cardid"/>
+        <result property="password" column="password"/>
+        <result property="memberName" column="member_name"/>
+        <result property="mobilephones" column="mobilephones"/>
+        <result property="balance" column="balance"/>
+        <result property="complimentaryMoney" column="complimentary_money"/>
+        <result property="haveCount" column="have_count"/>
+        <result property="addDatetime" column="add_datetime"/>
+        <result property="isloss" column="isloss"/>
+        <result property="state" column="state"/>
+        <result property="points" column="points"/>
+        <result property="expirydate" column="expirydate"/>
+        <result property="commission" column="commission"/>
+        <result property="birtdate" column="Birtdate"/>
+        <result property="sex" column="Sex"/>
+        <result property="nation" column="Nation"/>
+        <result property="blood" column="Blood"/>
+        <result property="stature" column="Stature"/>
+        <result property="weight" column="Weight"/>
+        <result property="carrer" column="Carrer"/>
+        <result property="education" column="Education"/>
+        <result property="iDcardno" column="IDcardno"/>
+        <result property="telephone" column="Telephone"/>
+        <result property="email" column="Email"/>
+        <result property="address" column="Address"/>
+        <result property="postcode" column="Postcode"/>
+        <result property="province" column="province"/>
+        <result property="city" column="city"/>
+        <result property="memo" column="Memo"/>
+        <result property="area" column="area"/>
+        <result property="ismakeup" column="ismakeup"/>
+        <!--<association property="sysDept" javaType="com.ruoyi.system.domain.SysDept">
+        	<result property="deptId" column="dept_id"/>
+        	<result property="deptName" column="dept_name"/>
+        </association>-->
+        <association property="sysDept" column="dept_id" javaType="com.ruoyi.system.domain.SysDept"
+                     resultMap="deptResult"/>
+        <association property="tMemberType" column="id" javaType="com.ruoyi.system.domain.TMemberType"
+                     resultMap="TMemberTypeResult"/>
+
+    </resultMap>
+
+    <resultMap id="deptResult" type="SysDept">
+        <id property="deptId" column="dept_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="status" column="dept_status"/>
+    </resultMap>
+    <resultMap id="TMemberTypeResult" type="TMemberType">
+        <result property="id" column="id"/>
+        <result property="companyid" column="companyid"/>
+        <result property="memberTypeName" column="member_type_name"/>
+        <result property="discount" column="discount"/>
+        <result property="points_rule" column="points_rule"/>
+        <result property="maxConsume" column="max_consume"/>
+        <result property="isRerurn" column="is_rerurn"/>
+        <result property="isEncourage" column="is_encourage"/>
+    </resultMap>
+    <sql id="selectTMemberVo">
+        SELECT tm.id, tm.companyid, tm.member_type_id, tm.member_no, tm.cardid, tm.PASSWORD, tm.member_name,
+        tm.mobilephones, tm.balance, tm.complimentary_money,
+        tm.have_count, tm.add_datetime, tm.isloss,tm.state, tm.points, tm.expirydate, tm.commission, tm.Birtdate,
+        tm.Sex, tm.Nation, tm.Blood, tm.Stature, tm.Weight, tm.Carrer, tm.Education, tm.IDcardno,
+        tm.Telephone, tm.Email, tm.Address, tm.Postcode, tm.province, tm.city, tm.Memo, tm.AREA , tm.ismakeup ,
+        d.dept_name,mty.member_type_name,mty.discount,mty.points_rule,mty.max_consume,mty.is_rerurn,mty.is_encourage
+        FROM t_member tm,sys_dept d,t_member_type mty
+    </sql>
+
+    <!--<select id="checkDeptNameUnique" resultMap="TMemberResult">
+        SELECT * FROM t_member tm
+        where tm.id = #{id}
+    </select>-->
+
+    <update id="updateTMemberByMemberNo" parameterType="TMember">
+        update t_member
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companyid != null  ">companyid = #{companyid},</if>
+            <if test="memberTypeId != null  ">member_type_id = #{memberTypeId},</if>
+            <if test="memberNo != null  and memberNo != ''  ">member_no = #{memberNo},</if>
+            <if test="cardid != null  and cardid != ''  ">cardid = #{cardid},</if>
+            <if test="password != null  and password != ''  ">password = #{password},</if>
+            <if test="memberName != null  and memberName != ''  ">member_name = #{memberName},</if>
+            <if test="mobilephones != null  and mobilephones != ''  ">mobilephones = #{mobilephones},</if>
+            <if test="balance != null  ">balance = #{balance},</if>
+            <if test="complimentaryMoney != null  ">complimentary_money = #{complimentaryMoney},</if>
+            <if test="haveCount != null  ">have_count = #{haveCount},</if>
+            <if test="addDatetime != null  ">add_datetime = #{addDatetime},</if>
+            <if test="isloss != null  ">isloss = #{isloss},</if>
+            <if test="state != null  ">state = #{state},</if>
+            <if test="points != null  ">points = #{points},</if>
+            <if test="expirydate != null  ">expirydate = #{expirydate},</if>
+            <if test="commission != null  ">commission = #{commission},</if>
+            <if test="birtdate != null  ">Birtdate = #{birtdate},</if>
+            <if test="sex != null  and sex != ''  ">Sex = #{sex},</if>
+            <if test="nation != null  and nation != ''  ">Nation = #{nation},</if>
+            <if test="blood != null  and blood != ''  ">Blood = #{blood},</if>
+            <if test="stature != null  ">Stature = #{stature},</if>
+            <if test="weight != null  ">Weight = #{weight},</if>
+            <if test="carrer != null  and carrer != ''  ">Carrer = #{carrer},</if>
+            <if test="education != null  and education != ''  ">Education = #{education},</if>
+            <if test="iDcardno != null  and iDcardno != ''  ">IDcardno = #{iDcardno},</if>
+            <if test="telephone != null  and telephone != ''  ">Telephone = #{telephone},</if>
+            <if test="email != null  and email != ''  ">Email = #{email},</if>
+            <if test="address != null  and address != ''  ">Address = #{address},</if>
+            <if test="postcode != null  and postcode != ''  ">Postcode = #{postcode},</if>
+            <if test="province != null  and province != ''  ">province = #{province},</if>
+            <if test="city != null  and city != ''  ">city = #{city},</if>
+            <if test="memo != null  and memo != ''  ">Memo = #{memo},</if>
+            <if test="area != null  and area != ''  ">area = #{area},</if>
+        </trim>
+        where member_no = #{memberNo}
+    </update>
+
+    <select id="checkDeptNameUnique" resultMap="TMemberResult">
+        SELECT * FROM t_member tm
+        <where>
+            <if test="memberNo != null  and memberNo != '' ">and tm.member_no = #{memberNo}</if>
+            <if test="companyid != null  and companyid != '' ">and tm.companyid = #{companyid}</if>
+        </where>
+    </select>
+
+    <select id="checkCardCount" parameterType="TMember" resultType="int">
+        SELECT COUNT(member_no) FROM t_member WHERE member_no=#{memberNo}
+    </select>
+
+    <select id="selectMemberNoAndPhone" parameterType="TMember" resultMap="TMemberResult">
+        <include refid="selectTMemberVo"/>
+        <where>
+            tm.companyid = d.dept_id and tm.member_type_id = mty.id
+            <if test="memberNo != null  and memberNo != '' ">and member_no = #{memberNo}</if>
+            <if test="mobilephones != null  and mobilephones != '' ">and mobilephones = #{mobilephones}</if>
+            <!--            <if test="tMemberType.discount != null  and tMemberType.discount != '' ">   and  mty.discount = #{tMemberType.discount}</if>-->
+
+            and tm.state=0
+        </where>
+    </select>
+
+    <select id="selectByMemberNoAndPhone" parameterType="TMember" resultMap="TMemberResult">
+        SELECT state,isloss,balance FROM t_member tm,sys_dept d,t_member_type mty
+        <where>
+            tm.companyid = d.dept_id and tm.member_type_id = mty.id
+            <if test="memberNo != null  and memberNo != '' ">and member_no = #{memberNo}</if>
+            <if test="mobilephones != null  and mobilephones != '' ">and mobilephones = #{mobilephones}</if>
+        </where>
+    </select>
+
+    <update id="updateTMemberNoAndPhone" parameterType="TMember">
+        update t_member
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="balance != null  ">balance = #{balance},</if>
+            <if test="points != null ">points = #{points},</if>
+        </trim>
+        <where>
+            <if test="memberNo != null  and memberNo != '' ">and member_no = #{memberNo}</if>
+            <if test="mobilephones != null  and mobilephones != '' ">and mobilephones = #{mobilephones}</if>
+
+            and state=0
+        </where>
+    </update>
+
+    <select id="selectTMemberList" parameterType="TMember" resultMap="TMemberResult">
+        <include refid="selectTMemberVo"/>
+        <where>
+            <if test="id != null ">and id = #{id}</if>
+            <if test="companyid != null ">and companyid = #{companyid}</if>
+            <if test="memberTypeId != null ">and member_type_id = #{memberTypeId}</if>
+            <if test="memberNo != null  and memberNo != '' ">and member_no = #{memberNo}</if>
+            <if test="cardid != null  and cardid != '' ">and cardid = #{cardid}</if>
+            <if test="password != null  and password != '' ">and password = #{password}</if>
+            <if test="memberName != null  and memberName != '' ">and member_name = #{memberName}</if>
+            <if test="mobilephones != null  and mobilephones != '' ">and mobilephones = #{mobilephones}</if>
+            <if test="balance != null ">and balance = #{balance}</if>
+            <if test="complimentaryMoney != null ">and complimentary_money = #{complimentaryMoney}</if>
+            <if test="haveCount != null ">and have_count = #{haveCount}</if>
+            <!--<if test="addDatetime != null "> and add_datetime = #{addDatetime}</if>-->
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(tm.add_datetime,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(tm.add_datetime,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            <if test="isloss != null ">and isloss = #{isloss}</if>
+            <!--<if test="state != null "> and state = #{state}</if>-->
+            <if test="points != null ">and points = #{points}</if>
+            <if test="expirydate != null ">and expirydate = #{expirydate}</if>
+            <if test="commission != null ">and commission = #{commission}</if>
+            <if test="birtdate != null ">and Birtdate = #{birtdate}</if>
+            <if test="sex != null  and sex != '' ">and Sex = #{sex}</if>
+            <if test="nation != null  and nation != '' ">and Nation = #{nation}</if>
+            <if test="blood != null  and blood != '' ">and Blood = #{blood}</if>
+            <if test="stature != null ">and Stature = #{stature}</if>
+            <if test="weight != null ">and Weight = #{weight}</if>
+            <if test="carrer != null  and carrer != '' ">and Carrer = #{carrer}</if>
+            <if test="education != null  and education != '' ">and Education = #{education}</if>
+            <if test="iDcardno != null  and iDcardno != '' ">and IDcardno = #{iDcardno}</if>
+            <if test="telephone != null  and telephone != '' ">and Telephone = #{telephone}</if>
+            <if test="email != null  and email != '' ">and Email = #{email}</if>
+            <if test="address != null  and address != '' ">and Address = #{address}</if>
+            <if test="postcode != null  and postcode != '' ">and Postcode = #{postcode}</if>
+            <if test="province != null  and province != '' ">and province = #{province}</if>
+            <if test="city != null  and city != '' ">and city = #{city}</if>
+            <if test="memo != null  and memo != '' ">and Memo = #{memo}</if>
+            <if test="area != null  and area != '' ">and area = #{area}</if>
+            <if test="ismakeup != null  and ismakeup != '' ">and ismakeup = #{ismakeup}</if>
+            <if test="sysDept.deptName != null  and sysDept.deptName != '' ">and d.dept_name = #{sysDept.deptName}</if>
+            <if test="tMemberType.memberTypeName != null  and tMemberType.memberTypeName != '' ">and
+                mty.member_type_name = #{tMemberType.memberTypeName}
+            </if>
+            <if test="tMemberType.discount != null  and tMemberType.discount != '' ">and mty.discount =
+                #{tMemberType.discount}
+            </if>
+
+            and tm.companyid = d.dept_id and tm.member_type_id = mty.id and tm.state=0
+            ${params.dataScope}
+            order by id desc
+        </where>
+
+    </select>
+
+    <!--<select id="selectTMemberById" parameterType="Long" resultMap="TMemberResult">
+        <include refid="selectTMemberVo"/>
+        where tm.member_no = #{memberNo} and tm.companyid = d.dept_id and tm.member_type_id = mty.id
+    </select>-->
+    <select id="selectTMemberById" parameterType="Long" resultMap="TMemberResult">
+        <include refid="selectTMemberVo"/>
+        where tm.id = #{id} and tm.companyid = d.dept_id and tm.member_type_id = mty.id
+    </select>
+    <select id="checkCardNoUnique" parameterType="TMember" resultType="int">
+        <!--<include refid="selectTMemberVo"/>-->
+        select count(1) from t_member where member_no=#{memberNo} and companyid=#{companyid} and
+        member_type_id=#{memberTypeId}
+
+    </select>
+    <select id="checkPhoneUnique" parameterType="TMember" resultType="int">
+        <!--<include refid="selectTMemberVo"/>-->
+        select count(1) from t_member where mobilephones=#{mobilephones} and companyid=#{companyid} and
+        member_type_id=#{memberTypeId}
+
+    </select>
+
+    <insert id="insertTMember" parameterType="TMember">
+        insert into t_member
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  ">id,</if>
+            <if test="companyid != null  ">companyid,</if>
+            <if test="memberTypeId != null  ">member_type_id,</if>
+            <if test="memberNo != null  and memberNo != ''  ">member_no,</if>
+            <if test="cardid != null  and cardid != ''  ">cardid,</if>
+            <if test="password != null  and password != ''  ">password,</if>
+            <if test="memberName != null  and memberName != ''  ">member_name,</if>
+            <if test="mobilephones != null  and mobilephones != ''  ">mobilephones,</if>
+            <if test="balance != null  ">balance,</if>
+            <if test="complimentaryMoney != null  ">complimentary_money,</if>
+            <if test="haveCount != null  ">have_count,</if>
+            <!--<if test="addDatetime != null  ">add_datetime,</if>-->
+            <if test="isloss != null  ">isloss,</if>
+            <if test="state != null  ">state,</if>
+            <if test="points != null  ">points,</if>
+            <if test="expirydate != null  ">expirydate,</if>
+            <if test="commission != null  ">commission,</if>
+            <if test="birtdate != null  ">Birtdate,</if>
+            <if test="sex != null  and sex != ''  ">Sex,</if>
+            <if test="nation != null  and nation != ''  ">Nation,</if>
+            <if test="blood != null  and blood != ''  ">Blood,</if>
+            <if test="stature != null  ">Stature,</if>
+            <if test="weight != null  ">Weight,</if>
+            <if test="carrer != null  and carrer != ''  ">Carrer,</if>
+            <if test="education != null  and education != ''  ">Education,</if>
+            <if test="iDcardno != null  and iDcardno != ''  ">IDcardno,</if>
+            <if test="telephone != null  and telephone != ''  ">Telephone,</if>
+            <if test="email != null  and email != ''  ">Email,</if>
+            <if test="address != null  and address != ''  ">Address,</if>
+            <if test="postcode != null  and postcode != ''  ">Postcode,</if>
+            <if test="province != null  and province != ''  ">province,</if>
+            <if test="city != null  and city != ''  ">city,</if>
+            <if test="memo != null  and memo != ''  ">Memo,</if>
+            <if test="area != null  and area != ''  ">area,</if>
+            <if test="ismakeup != null  and ismakeup != ''  ">ismakeup,</if>
+            add_datetime
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  ">#{id},</if>
+            <if test="companyid != null  ">#{companyid},</if>
+            <if test="memberTypeId != null  ">#{memberTypeId},</if>
+            <if test="memberNo != null  and memberNo != ''  ">#{memberNo},</if>
+            <if test="cardid != null  and cardid != ''  ">#{cardid},</if>
+            <if test="password != null  and password != ''  ">#{password},</if>
+            <if test="memberName != null  and memberName != ''  ">#{memberName},</if>
+            <if test="mobilephones != null  and mobilephones != ''  ">#{mobilephones},</if>
+            <if test="balance != null  ">#{balance},</if>
+            <if test="complimentaryMoney != null  ">#{complimentaryMoney},</if>
+            <if test="haveCount != null  ">#{haveCount},</if>
+            <!--<if test="addDatetime != null  ">#{addDatetime},</if>-->
+            <if test="isloss != null  ">#{isloss},</if>
+            <if test="state != null  ">#{state},</if>
+            <if test="points != null  ">#{points},</if>
+            <if test="expirydate != null  ">#{expirydate},</if>
+            <if test="commission != null  ">#{commission},</if>
+            <if test="birtdate != null  ">#{birtdate},</if>
+            <if test="sex != null  and sex != ''  ">#{sex},</if>
+            <if test="nation != null  and nation != ''  ">#{nation},</if>
+            <if test="blood != null  and blood != ''  ">#{blood},</if>
+            <if test="stature != null  ">#{stature},</if>
+            <if test="weight != null  ">#{weight},</if>
+            <if test="carrer != null  and carrer != ''  ">#{carrer},</if>
+            <if test="education != null  and education != ''  ">#{education},</if>
+            <if test="iDcardno != null  and iDcardno != ''  ">#{iDcardno},</if>
+            <if test="telephone != null  and telephone != ''  ">#{telephone},</if>
+            <if test="email != null  and email != ''  ">#{email},</if>
+            <if test="address != null  and address != ''  ">#{address},</if>
+            <if test="postcode != null  and postcode != ''  ">#{postcode},</if>
+            <if test="province != null  and province != ''  ">#{province},</if>
+            <if test="city != null  and city != ''  ">#{city},</if>
+            <if test="memo != null  and memo != ''  ">#{memo},</if>
+            <if test="area != null  and area != ''  ">#{area},</if>
+            <if test="ismakeup != null  and ismakeup != ''  ">#{ismakeup},</if>
+            sysdate()
+        </trim>
+    </insert>
+
+    <update id="updateTMember" parameterType="TMember">
+        update t_member
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companyid != null  ">companyid = #{companyid},</if>
+            <if test="memberTypeId != null  ">member_type_id = #{memberTypeId},</if>
+            <if test="memberNo != null  and memberNo != ''  ">member_no = #{memberNo},</if>
+            <if test="cardid != null  and cardid != ''  ">cardid = #{cardid},</if>
+            <if test="password != null  and password != ''  ">password = #{password},</if>
+            <if test="memberName != null  and memberName != ''  ">member_name = #{memberName},</if>
+            <if test="mobilephones != null  and mobilephones != ''  ">mobilephones = #{mobilephones},</if>
+            <if test="balance != null  ">balance = #{balance},</if>
+            <if test="complimentaryMoney != null  ">complimentary_money = #{complimentaryMoney},</if>
+            <if test="haveCount != null  ">have_count = #{haveCount},</if>
+            <if test="addDatetime != null  ">add_datetime = #{addDatetime},</if>
+            <if test="isloss != null  ">isloss = #{isloss},</if>
+            <if test="state != null  ">state = #{state},</if>
+            <if test="points != null  ">points = #{points},</if>
+            <if test="expirydate != null  ">expirydate = #{expirydate},</if>
+            <if test="commission != null  ">commission = #{commission},</if>
+            <if test="birtdate != null  ">Birtdate = #{birtdate},</if>
+            <if test="sex != null  and sex != ''  ">Sex = #{sex},</if>
+            <if test="nation != null  and nation != ''  ">Nation = #{nation},</if>
+            <if test="blood != null  and blood != ''  ">Blood = #{blood},</if>
+            <if test="stature != null  ">Stature = #{stature},</if>
+            <if test="weight != null  ">Weight = #{weight},</if>
+            <if test="carrer != null  and carrer != ''  ">Carrer = #{carrer},</if>
+            <if test="education != null  and education != ''  ">Education = #{education},</if>
+            <if test="iDcardno != null  and iDcardno != ''  ">IDcardno = #{iDcardno},</if>
+            <if test="telephone != null  and telephone != ''  ">Telephone = #{telephone},</if>
+            <if test="email != null  and email != ''  ">Email = #{email},</if>
+            <if test="address != null  and address != ''  ">Address = #{address},</if>
+            <if test="postcode != null  and postcode != ''  ">Postcode = #{postcode},</if>
+            <if test="province != null  and province != ''  ">province = #{province},</if>
+            <if test="city != null  and city != ''  ">city = #{city},</if>
+            <if test="memo != null  and memo != ''  ">Memo = #{memo},</if>
+            <if test="area != null  and area != ''  ">area = #{area},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTMemberById" parameterType="Long">
+        delete from t_member where id = #{id}
+    </delete>
+
+    <delete id="deleteTMemberByIds" parameterType="String">
+        delete from t_member where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

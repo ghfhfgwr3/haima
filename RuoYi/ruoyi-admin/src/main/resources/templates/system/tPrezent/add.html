@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('添加奖品')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-tPrezent-add">
+        <input id="treeId" name="parentId" type="hidden" th:value="${dept.deptId}"/>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">公司名称：</label>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <input class="form-control" type="text" onclick="selectDeptTree()" id="treeName" readonly="true"
+                           th:value="${dept.deptName}">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                </div>
+            </div>
+            <!--</div>
+            <div class="form-group">	-->
+            <label class="col-sm-2 control-label">礼品编号：</label>
+            <div class="col-sm-3">
+                <input id="prezentBh" name="prezentBh" class="form-control" type="text" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">礼品名称：</label>
+            <div class="col-sm-3">
+                <input id="prezentName" name="prezentName" class="form-control" type="text" required>
+            </div>
+            <!--</div>
+            <div class="form-group">	-->
+            <label class="col-sm-2 control-label">礼品总数：</label>
+            <div class="col-sm-3">
+                <input id="prezentTotalnum" name="prezentTotalnum" class="form-control" type="text" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">剩余数量：</label>
+            <div class="col-sm-3">
+                <input id="prezentRemain" name="prezentRemain" class="form-control" type="text" required>
+            </div>
+            <!--</div>
+            <div class="form-group">	-->
+            <label class="col-sm-2 control-label">图片：</label>
+            <div class="col-sm-3">
+                <input id="prezentImg" name="prezentImg" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">所需积分：</label>
+            <div class="col-sm-3">
+                <input id="cent" name="cent" class="form-control" type="text" required>
+            </div>
+            <label class="col-sm-2 control-label">状态：</label>
+            <div class="col-sm-3">
+                <label class="toggle-switch switch-solid">
+                    <input type="checkbox" id="state" checked>
+                    <span></span>
+                </label>
+            </div>
+            <!--<label class="col-sm-2 control-label">状态：</label>
+            <div class="col-sm-3">
+                <input id="state" name="state" class="form-control" type="text">
+            </div>-->
+            <!--</div>
+            <div class="form-group">	-->
+            <!--<label class="col-sm-2 control-label">操作员：</label>
+            <div class="col-sm-3">
+                <input id="oprator" name="oprator" class="form-control" type="text">
+            </div>-->
+        </div>
+        <!--<div class="form-group">	-->
+
+        <!--</div>
+        <div class="form-group">-->
+        <!--<label class="col-sm-2 control-label">操作时间：</label>
+        <div class="col-sm-3">
+            <input id="createDate" name="createDate" class="form-control" type="text">
+        </div>-->
+        <!--</div>-->
+        <div class="form-group">
+            <!--<label class="col-sm-2 control-label">开始时间：</label>
+            <div class="col-sm-3">
+                <input id="beginDate" name="beginDate" class="form-control" type="text">
+            </div>-->
+
+            <label class="col-sm-2 control-label">开始时间： </label>
+            <div class="col-sm-3">
+                <input type="text" class="time-input" id="beginDate" name="beginDate" required/>
+            </div>
+            <label class="col-sm-2 control-label">结束时间： </label>
+            <div class="col-sm-3">
+                <input type="text" class="time-input" id="endDate" name="endDate" required/>
+            </div>
+            <!--</div>
+            <div class="form-group">	-->
+            <!--<label class="col-sm-2 control-label">结束时间：</label>
+            <div class="col-sm-3">
+                <input id="endDate" name="endDate" class="form-control" type="text">
+            </div>-->
+        </div>
+    </form>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript">
+    var prefix = ctx + "system/tPrezent";
+    var prefix2 = ctx + "system/tWorker";
+
+    $("#form-tPrezent-add").validate({
+        rules: {
+            prezentBh: {
+                remote: {
+                    url: prefix + "/checkBhUnique",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        "companyid": function () {
+                            return $("input[id='treeId']").val();
+                        },
+
+                        "prezentBh": function () {
+                            return $.common.trim($("#prezentBh").val());
+                        }
+                    },
+                    dataFilter: function (data, type) {
+                        return $.validate.unique(data);
+                    }
+                }
+
+            },
+            // xxxx:{
+            // 	required:true,
+            // },
+        },
+        messages: {
+            "prezentBh": {
+                remote: "该编号已经存在"
+            }
+        },
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            var companyid = $("input[id='treeId']").val();
+            var data = $("#form-user-add").serializeArray();
+            var state = $("input[id='state']").is(':checked') == true ? 0 : 1;
+            var prezentBh = $("input[id='prezentBh']").val();
+            var prezentName = $("input[id='prezentName']").val();
+            var prezentTotalnum = $("input[id='prezentTotalnum']").val();
+            var prezentRemain = $("input[id='prezentRemain']").val();
+            var cent = $("input[id='cent']").val();
+            var beginDate = $("input[id='beginDate']").val();
+            var endDate = $("input[id='endDate']").val();
+            data.push({"name": "companyid", "value": companyid});
+            data.push({"name": "state", "value": state});
+            data.push({"name": "prezentBh", "value": prezentBh});
+            data.push({"name": "prezentName", "value": prezentName});
+            data.push({"name": "prezentTotalnum", "value": prezentTotalnum});
+            data.push({"name": "prezentRemain", "value": prezentRemain});
+            data.push({"name": "cent", "value": cent});
+            data.push({"name": "beginDate", "value": beginDate});
+            data.push({"name": "endDate", "value": endDate});
+            $.operate.save(prefix + "/add", data);
+        }
+    }
+
+    function selectDeptTree() {
+        var options = {
+            title: '部门选择',
+            width: "380",
+            url: prefix2 + "/selectDeptTree/" + $("#treeId").val(),
+            callBack: doSubmit
+        };
+        $.modal.openOptions(options);
+    }
+
+    function doSubmit(index, layero) {
+        var body = layer.getChildFrame('body', index);
+        $("#treeId").val(body.find('#treeId').val());
+        $("#treeName").val(body.find('#treeName').val());
+        layer.close(index);
+    }
+</script>
+</body>
+</html>

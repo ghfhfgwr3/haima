@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增消费机')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-tConsumerMachine-add">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">商户信息：</label>
+				<div class="col-sm-8">
+					<input id="shopInfo" name="shopInfo" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">商户编号：</label>
+				<div class="col-sm-8">
+					<input id="shopNum" name="shopNum" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">卡密：</label>
+				<div class="col-sm-8">
+					<input id="kalman" name="kalman" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">本设备模式：</label>
+				<div class="col-sm-8">
+					<input id="devMode" name="devMode" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">服务器域名：</label>
+				<div class="col-sm-8">
+					<input id="domain" name="domain" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">端口号：</label>
+				<div class="col-sm-8">
+					<input id="port" name="port" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">最大消费金额：</label>
+				<div class="col-sm-8">
+					<input id="maxMoney" name="maxMoney" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">押金：</label>
+				<div class="col-sm-8">
+					<input id="deposit" name="deposit" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">当次限额：</label>
+				<div class="col-sm-8">
+					<input id="current" name="current" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">卡标示：</label>
+				<div class="col-sm-8">
+					<input id="cardLabeling" name="cardLabeling" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">折扣：</label>
+				<div class="col-sm-8">
+					<input id="discount" name="discount" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">卡类型：</label>
+				<div class="col-sm-8">
+					<input id="cardType" name="cardType" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">本设备名称：</label>
+				<div class="col-sm-8">
+					<input id="devName" name="devName" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">升级文件目录及信息：</label>
+				<div class="col-sm-8">
+					<input id="file" name="file" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">请求路径：</label>
+				<div class="col-sm-8">
+					<input id="path" name="path" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">账号：</label>
+				<div class="col-sm-8">
+					<input id="account" name="account" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">密码：</label>
+				<div class="col-sm-8">
+					<input id="pwd" name="pwd" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">设备ID：</label>
+				<div class="col-sm-8">
+					<input id="devId" name="devId" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">设备请求时间：</label>
+				<div class="col-sm-8">
+					<input id="time" name="time" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/tConsumerMachine"
+		$("#form-tConsumerMachine-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-tConsumerMachine-add').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

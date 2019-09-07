@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('会员类型列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            公司ID：<input type="text" name="sysDept.deptName"/>
+                        </li>
+
+                        <!--<li>
+                            会员卡类型：
+                            <select name="memberTypeName" id="memberTypeName">
+                                <option value="">请选择</option> &lt;!&ndash;循环遍历集合&ndash;&gt;
+                                &lt;!&ndash;th:selected="${userSmsTemplateApplication.signature  eq userSmsTemplateApplication.signature}" &lt;!&ndash;回显选中&ndash;&gt;&ndash;&gt;
+                                <option th:each="type : ${typename}" th:value="${type.memberTypeName}" th:text="${type.memberTypeName}"> &lt;!&ndash;下拉显示后台动态数据&ndash;&gt;
+                                </option>
+                            </select>
+                        </li>-->
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add(100)" shiro:hasPermission="system:tMemberType:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="system:tMemberType:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="system:tMemberType:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:tMemberType:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:tMemberType:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:tMemberType:remove')}]];
+    var prefix = ctx + "system/tMemberType";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add/{id}",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "会员类型",
+            showExport: true,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    field: 'sysDept.deptName',
+                    title: '店铺名称',
+                    sortable: true
+                },
+                {
+                    field: 'memberTypeName',
+                    title: '会员卡类型',
+                    sortable: true
+                },
+                {
+                    field: 'discount',
+                    title: '折扣',
+                    sortable: true
+                },
+                {
+                    field: 'maxConsume',
+                    title: '最大消费',
+                    sortable: true
+                },
+                {
+                    field: 'makeUpCost',
+                    title: '补办费用',
+                    sortable: true
+                },
+                {
+                    field: 'isMemberPrice',
+                    title: '是否会员价',
+                    visible: editFlag == 'hidden' ? false : true,
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row, 1);
+                    }
+                },
+                {
+                    field: 'isPoints',
+                    title: '是否积分',
+                    visible: editFlag == 'hidden' ? false : true,
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row, 2);
+                    }
+                },
+                {
+                    field: 'isRerurn',
+                    title: '是否可退',
+                    visible: editFlag == 'hidden' ? false : true,
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row, 3);
+                    }
+                },
+                {
+                    field: 'isM1',
+                    title: '是否M1卡',
+                    visible: editFlag == 'hidden' ? false : true,
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row, 4);
+                    }
+                },
+                {
+                    field: 'isEncourage',
+                    title: '是否奖励',
+                    visible: editFlag == 'hidden' ? false : true,
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row, 5);
+                    }
+                },
+                {
+                    field: 'isAllowother',
+                    title: '是否允许跨店消费',
+                    visible: editFlag == 'hidden' ? false : true,
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row, 6);
+                    }
+                },
+                {
+                    field: 'points_rule',
+                    title: '积分规则',
+                    sortable: true
+                },
+                {
+                    field: 'memo',
+                    title: '备注',
+                    sortable: true
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+        /*listTypeName();*/
+    });
+
+    function listTypeName() {
+        $.post(prefix + "/listTypeName", function (date) {
+            for (i = 0; i < date.length; i++) {
+                $("#memberTypeName").append("<option value='+date[i].memberTypeName+'>" + date[i].memberTypeName + "</option>");
+            }
+        });
+    }
+
+    function statusTools(row, i) {
+
+        if (i == 1) {
+
+            if (row.isMemberPrice == 1) {
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.id + '\',\'' + i + '\')"></i> ';
+            } else {
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.id + '\',\'' + i + '\')"></i> ';
+            }
+        } else if (i == 2) {
+            if (row.isPoints == 1) {
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.id + '\',\'' + i + '\')"></i> ';
+            } else {
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.id + '\',\'' + i + '\')"></i> ';
+            }
+        } else if (i == 3) {
+            if (row.isRerurn == 1) {
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.id + '\',\'' + i + '\')"></i> ';
+            } else {
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.id + '\',\'' + i + '\')"></i> ';
+            }
+        } else if (i == 4) {
+            if (row.isM1 == 1) {
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.id + '\',\'' + i + '\')"></i> ';
+            } else {
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.id + '\',\'' + i + '\')"></i> ';
+            }
+        } else if (i == 5) {
+            if (row.isEncourage == 1) {
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.id + '\',\'' + i + '\')"></i> ';
+            } else {
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.id + '\',\'' + i + '\')"></i> ';
+            }
+        } else if (i == 6) {
+            if (row.isAllowother == 1) {
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.id + '\',\'' + i + '\')"></i> ';
+            } else {
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.id + '\',\'' + i + '\')"></i> ';
+            }
+        }
+    }
+
+    /* 用户管理-停用 */
+    function disable(id, i) {
+        if (i == 1) {
+            $.modal.confirm("确认要停用会员价吗？", function () {
+                $.operate.post(prefix + "/edit", {"id": id, "isMemberPrice": 1});
+            })
+        } else if (i == 2) {
+            $.modal.confirm("确认要停用积分吗？", function () {
+                $.operate.post(prefix + "/edit", {"id": id, "isPoints": 1});
+            })
+        } else if (i == 3) {
+            $.modal.confirm("确认要停用可退吗？", function () {
+                $.operate.post(prefix + "/edit", {"id": id, "isRerurn": 1});
+            })
+        } else if (i == 4) {
+            $.modal.confirm("确认要停用M1卡吗？", function () {
+                $.operate.post(prefix + "/edit", {"id": id, "isM1": 1});
+            })
+        } else if (i == 5) {
+            $.modal.confirm("确认要停用奖励吗？", function () {
+                $.operate.post(prefix + "/edit", {"id": id, "isEncourage": 1});
+            })
+        } else if (i == 6) {
+            $.modal.confirm("确认要停用允许跨店消费吗？", function () {
+                $.operate.post(prefix + "/edit", {"id": id, "isAllowother": 1});
+            })
+        }
+    }
+
+    /* 用户管理启用 */
+    function enable(id, i) {
+        if (i == 1) {
+            $.modal.confirm("确认要启用会员价吗？", function () {
+                $.operate.post(prefix + "/edit", {"id": id, "isMemberPrice": 0});
+            })
+        } else if (i == 2) {
+            $.modal.confirm("确认要启用积分吗？", function () {
+                $.operate.post(prefix + "/edit", {"id": id, "isPoints": 0});
+            })
+        } else if (i == 3) {
+            $.modal.confirm("确认要启用可退吗？", function () {
+                $.operate.post(prefix + "/edit", {"id": id, "isRerurn": 0});
+            })
+        } else if (i == 4) {
+            $.modal.confirm("确认要启用M1卡吗？", function () {
+                $.operate.post(prefix + "/edit", {"id": id, "isM1": 0});
+            })
+        } else if (i == 5) {
+            $.modal.confirm("确认要启用奖励吗？", function () {
+                $.operate.post(prefix + "/update", {"id": id, "isEncourage": 0});
+            })
+        } else if (i == 6) {
+            $.modal.confirm("确认要启用允许跨店消费吗？", function () {
+                $.operate.post(prefix + "/update", {"id": id, "isAllowother": 0});
+            })
+        }
+    }
+</script>
+</body>
+</html>

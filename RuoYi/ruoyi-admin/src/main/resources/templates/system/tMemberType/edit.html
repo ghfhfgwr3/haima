@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改会员类型')"/>
+    <th:block th:include="include :: select2-css"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-tMemberType-edit" th:object="${tMemberType}">
+        <input id="id" name="id" th:field="*{id}" type="hidden">
+        <input name="deptId" type="hidden" th:field="*{companyid}" id="treeId"/>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">公司名称：</label>
+
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <input class="form-control" type="text" onclick="selectDeptTree()" name="companyid" id="companyid"
+                           readonly="true" th:field="*{sysDept.deptName}">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                </div>
+            </div>
+            <!--</div>
+            <div class="form-group">-->
+            <label class="col-sm-2 control-label">会员卡类型：</label>
+            <div class="col-sm-3">
+                <input id="memberTypeName" name="memberTypeName" th:field="*{memberTypeName}" class="form-control"
+                       type="text">
+                <!--<select name="memberTypeName" th:field="*{memberTypeName}" th:value="*{memberTypeId}" id="memberTypeName">
+
+                </select>-->
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">折扣：</label>
+            <div class="col-sm-3">
+                <input id="discount" name="discount" th:field="*{discount}" class="form-control" type="text">
+            </div>
+            <!--</div>
+            <div class="form-group">-->
+            <label class="col-sm-2 control-label">有效期：</label>
+            <div class="col-sm-3">
+                <input id="validDays" name="validDays" th:field="*{validDays}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">最大消费：</label>
+            <div class="col-sm-3">
+                <input id="maxConsume" name="maxConsume" th:field="*{maxConsume}" class="form-control" type="text">
+            </div>
+            <!--</div>
+            <div class="form-group">-->
+            <label class="col-sm-2 control-label">补办费用：</label>
+            <div class="col-sm-3">
+                <input id="makeUpCost" name="makeUpCost" th:field="*{makeUpCost}" class="form-control" type="text">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">是否会员价：</label>
+            <div class="col-sm-3">
+                <label class="toggle-switch switch-solid">
+                    <input type="checkbox" id="isMemberPrice"
+                           th:checked="${tMemberType.isMemberPrice == '0' ? true : false}">
+                    <span></span>
+                </label>
+            </div>
+            <!--</div>
+            <div class="form-group">-->
+            <label class="col-sm-2 control-label">是否积分：</label>
+            <div class="col-sm-3">
+                <label class="toggle-switch switch-solid">
+                    <input type="checkbox" id="isPoints" th:checked="${tMemberType.isPoints == '0' ? true : false}">
+                    <span></span>
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">是否可退：</label>
+            <div class="col-sm-3">
+                <label class="toggle-switch switch-solid">
+                    <input type="checkbox" id="isRerurn" th:checked="${tMemberType.isRerurn == '0' ? true : false}">
+                    <span></span>
+                </label>
+            </div>
+            <!--</div>
+            <div class="form-group">-->
+            <label class="col-sm-2 control-label">是否M1卡：</label>
+            <div class="col-sm-3">
+                <label class="toggle-switch switch-solid">
+                    <input type="checkbox" id="isM1" th:checked="${tMemberType.isM1 == '0' ? true : false}">
+                    <span></span>
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">是否奖励：</label>
+            <div class="col-sm-3">
+                <label class="toggle-switch switch-solid">
+                    <input type="checkbox" id="isEncourage"
+                           th:checked="${tMemberType.isEncourage == '0' ? true : false}">
+                    <span></span>
+                </label>
+            </div>
+            <!--</div>
+            <div class="form-group">-->
+            <label class="col-sm-2 control-label">是否允许跨店消费：</label>
+            <div class="col-sm-3">
+                <label class="toggle-switch switch-solid">
+                    <input type="checkbox" id="isAllowother"
+                           th:checked="${tMemberType.isAllowother == '0' ? true : false}">
+                    <span></span>
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">积分规则：</label>
+            <div class="col-sm-3">
+                <input id="memo" name="memo" th:field="*{points_rule}" class="form-control" type="text">
+            </div>
+            <!--</div>
+            <div class="form-group">-->
+            <label class="col-sm-2 control-label">备注：</label>
+            <div class="col-sm-3">
+                <input id="memo" name="memo" th:field="*{memo}" class="form-control" type="text">
+            </div>
+        </div>
+
+    </form>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: select2-js"/>
+<th:block th:include="include :: ztree-js"/>
+<script type="text/javascript">
+    /*alert($("#memberTypeName").val());
+    alert($("#memberTypeName").html());*/
+    var prefix = ctx + "system/tMemberType";
+    $("#form-tMemberType-edit").validate({
+        rules: {
+            xxxx: {
+                required: true,
+            },
+        },
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            var data = $("#form-tMemberType-edit").serializeArray();
+            data.push({
+                "name": "isMemberPrice",
+                "value": $("input[id='isMemberPrice']").is(':checked') == true ? 0 : 1
+            });
+            data.push({"name": "isPoints", "value": $("input[id='isPoints']").is(':checked') == true ? 0 : 1});
+            data.push({"name": "isRerurn", "value": $("input[id='isRerurn']").is(':checked') == true ? 0 : 1});
+            data.push({"name": "isM1", "value": $("input[id='isM1']").is(':checked') == true ? 0 : 1});
+            data.push({"name": "isEncourage", "value": $("input[id='isEncourage']").is(':checked') == true ? 0 : 1});
+            data.push({"name": "isAllowother", "value": $("input[id='isAllowother']").is(':checked') == true ? 0 : 1});
+            $.operate.save(prefix + "/edit", data);
+        }
+    }
+
+    /*用户管理-修改-选择部门树*/
+    function selectDeptTree() {
+        var deptId = $.common.isEmpty($("#treeId").val()) ? "100" : $("#treeId").val();
+        var url = ctx + "system/dept/selectDeptTree/" + deptId;
+        var options = {
+            title: '选择部门',
+            width: "380",
+            url: url,
+            callBack: doSubmit
+        };
+        $.modal.openOptions(options);
+    }
+
+    function doSubmit(index, layero) {
+        var tree = layero.find("iframe")[0].contentWindow.$._tree;
+        if ($.tree.notAllowParents(tree)) {
+            var body = layer.getChildFrame('body', index);
+            $("#treeId").val(body.find('#treeId').val());
+            $("#companyid").val(body.find('#treeName').val());
+            layer.close(index);
+            //listTypeName();
+        }
+    }
+
+
+    /*function edit (){
+        var memberTypeName =  $("select[name='memberTypeName']").html();
+        var memberTypeNameId =  $("select[name='memberTypeName']").val();
+        for (var i = 0;i<data.length;i++){
+            $("select[name='memberTypeName']").html("");
+            $("select[name='memberTypeName']").append("<option value='"+memberTypeNameId+"'>"+memberTypeName+"</option>");
+            $("select[name='memberTypeName']").append("<option value='"+data[i].memberTypeId+"'>"+data[i].memberTypeName+"</option>");
+        }
+    }*/
+</script>
+</body>
+</html>

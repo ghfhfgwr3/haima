@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <th:block th:include="include :: header('')"/>
+</head>
+
+<body class="gray-bg">
+
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>充值</h5>
+                </div>
+                <div class="container-div">
+                    <div class="row">
+                        <div class="col-sm-12 search-collapse">
+                            <h4>会员信息</h4>
+                            <form id="formId">
+                                <div class="select-list">
+                                    <ul>
+                                        <li>
+                                            会员卡号：<input type="text" name="memberNo" value=""/>
+                                        </li>
+                                        <li>
+                                            &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;手机：<input type="text"
+                                                                                           name="mobilephones"
+                                                                                           value=""/>
+                                        </li>
+                                        <li>
+                                            可用余额：<input type="text" name="balance" value=""/>
+                                        </li>
+                                        <li>
+                                            &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;姓名：<input type="text" name="memberName"
+                                                                                           value=""/>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-12 search-collapse">
+                            <form id="formId1">
+                                <div class="select-list">
+                                    <ul>
+                                        <li>
+                                            &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;充值金额：<input type="text" name="balance1"
+                                                                                       onkeyup="checknum(this)"/>
+                                        </li>
+
+                                        <li>
+                                            合计：<i class="heji">0.00</i>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;<label
+                                                class="check-box">
+                                            <input type="checkbox" checked="" value="option1" id="inlineCheckbox1"
+                                                   style="position: absolute; opacity: 0;">
+                                            <ins class="iCheck-helper"
+                                                 style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                                            自动打印小票</label>
+                                        </li>
+                                        <li>
+                                            &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            &nbsp;&nbsp;&nbsp;&nbsp;<label class="radio-box box1">
+                                            <input type="radio" checked="" value="" name="paytype"
+                                                   style="position: absolute; opacity: 0;">
+                                            <ins class="iCheck-helper"
+                                                 style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                                        </label>
+                                            <label class="radio-box box2">
+                                                <input type="radio" value="" name="paytype"
+                                                       style="position: absolute; opacity: 0;">
+                                                <ins class="iCheck-helper"
+                                                     style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="btn-group-sm" id="toolbar" role="group">
+                            &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;<a
+                                class="btn btn-primary btn-rounded btn-sm" onclick="cz()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                            <a class="btn btn-primary btn-edit btn-sm" onclick="off(1)">
+                                <i class="fa fa-edit"></i> 充值
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>退款</h5>
+                </div>
+                <div class="container-div">
+                    <div class="row">
+                        <div class="col-sm-12 search-collapse">
+                            <!--<h4>搜索条件</h4>-->
+                            <form id="formId2">
+                                <div class="select-list">
+                                    <ul>
+                                        <li>
+                                            会员卡号：<input type="text" name="memberCard" value=""/>
+                                        </li>
+                                        <li>
+                                            &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;手机：<input type="text" name="phone"
+                                                                                           value=""/>
+                                        </li>
+                                        <li>
+                                            可用余额：<input type="text" name="balanceChange" value=""/>
+                                        </li>
+                                        <li>
+                                            &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;姓名：<input type="text"
+                                                                                           name="memberNameNo"
+                                                                                           value=""/>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-12 search-collapse">
+                            <form id="formId3">
+                                <div class="select-list">
+                                    <ul>
+                                        <li>
+                                            &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;退款金额：<input type="text"
+                                                                                       name="balanceChangeOne"/>
+                                        </li>
+                                        </li>
+                                        <li>
+                                            &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            &nbsp;&nbsp;&nbsp;&nbsp;<label class="check-box">
+                                            <input type="checkbox" checked="" value="option1"
+                                                   style="position: absolute; opacity: 0;">
+                                            <ins class="iCheck-helper"
+                                                 style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                                            自动打印小票</label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="btn-group-sm" role="group">
+                            &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;<a
+                                class="btn btn-primary btn-rounded btn-sm" onclick="tk()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="resetk()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                            <a class="btn btn-primary btn-edit btn-sm" onclick="off(0)"
+                               shiro:hasPermission="system:recharge:money">
+                                <i class="fa fa-edit"></i> 退款
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "system/recharge";
+    var SysVipPayment = [[${@dict.getType('sys_vip_payment')}]];
+    var memberTypeId = 0;
+    var companyid = 0;
+    var isEncourage = 0;
+    $(function () {
+        var a = 0;
+        for (var i = 0; i < SysVipPayment.length; i++) {
+            a++;
+            /*console.log(SysVipPayment[i]);*/
+            $(".box" + a + " input").val(SysVipPayment[i].dictValue);
+            $(".box" + a + "").append(SysVipPayment[i].dictLabel);
+        }
+    })
+
+
+    function checknum(obj) {
+        obj.value = obj.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+        obj.value = obj.value.replace(/^\./g, "");  //验证第一个字符是数字而不是.
+        obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的.
+        obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+        changeMoney()
+    }
+
+    function changeMoney() {
+        $.ajax({
+            url: prefix + "/scbct",
+            data: {"companyid": companyid, "cardtype": memberTypeId},
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                var balance1 = $("input[name='balance1']").val();
+                if (data.length == 0) {//没有填写奖励规则  不管是否奖励都不奖励
+                    $(".heji").html(balance1);
+                } else {
+
+
+                    if (isEncourage == 1) {//不奖励
+                        $(".heji").html(balance1);
+                    } else if (isEncourage == 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].giveType == 0) {//固定金额奖励
+
+                                if (nowInDateBetwen(data[i].beginDate, data[i].andDate)) {//再奖励时间段内
+                                    if (balance1 < data[i].beginMoney) {
+                                        $(".heji").html(balance1);
+                                        break;
+                                    } else if (data[i].beginMoney <= balance1 && balance1 < data[i].andMoney) {
+                                        $(".heji").html(data[i].giveMoney * 1 + balance1 * 1);
+                                        break;
+                                    } else if (balance1 > data[i].andMoney) {
+                                        if (i == data.length - 1) {
+                                            $(".heji").html(data[i].giveMoney * 1 + balance1 * 1);
+                                            break;
+                                        }
+                                    }
+                                } else {
+                                    $(".heji").html(balance1);
+                                    break;
+                                }
+                            } else if (data[i].giveType == 1) {//实物奖励
+
+                            } else if (data[i].giveType == 2) {//百分比奖励
+                                /*$(".heji").html(balance1*data[i].perCentage*0.01);*/
+
+                                if (nowInDateBetwen(data[i].beginDate, data[i].andDate)) {//再奖励时间段内
+                                    if (balance1 < data[i].beginMoney) {
+                                        $(".heji").html(balance1);
+                                        break;
+                                    } else if (data[i].beginMoney <= balance1 && balance1 < data[i].andMoney) {
+                                        $(".heji").html(balance1 * data[i].perCentage * 0.01 + balance1 * 1);
+                                        break;
+                                    } else if (balance1 > data[i].andMoney) {
+                                        if (i == data.length - 1) {
+                                            $(".heji").html(balance1 * data[i].perCentage * 0.01 + balance1 * 1);
+                                            break;
+                                        }
+                                    }
+                                } else {//没有奖励阶段
+                                    $(".heji").html(balance1);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function cz() {
+        var memberNo = $("input[name='memberNo']").val();
+        var mobilephones = $("input[name='mobilephones']").val();
+        if ((memberNo == null || memberNo == "") && (mobilephones == null || mobilephones == "")) {
+            $.modal.msgWarning("请输入卡号或者手机号！");
+            return;
+        } else {
+
+            $.ajax({
+                url: prefix + "/list",
+                data: {
+                    "memberNo": $("input[name='memberNo']").val(),
+                    "mobilephones": $("input[name='mobilephones']").val()
+                },
+                type: "POST",
+                dataType: "json",
+                success: function (data) {
+
+                    var memberNo = data.memberNo
+
+                    if (memberNo == "不存在") {
+                        $.modal.msgWarning("该卡片不存在！");
+
+                        reset();
+                    } else {
+                        // alert(JSON.stringify(data));
+
+                        $("input[name='memberNo']").val(data.memberNo);
+                        $("input[name='mobilephones']").val(data.mobilephones);
+                        $("input[name='balance']").val(data.balance);
+                        $("input[name='memberName']").val(data.memberName);
+                        memberTypeId = data.memberTypeId;
+                        companyid = data.companyid;
+                        isEncourage = data.tMemberType.isEncourage;
+                        /*  $("input[name='isEncourage']").val(data.tMemberType.isEncourage);*/
+
+                    }
+                }
+            });
+        }
+    }
+
+    function tk() {
+        $.ajax({
+            url: prefix + "/list",
+            data: {"memberNo": $("input[name='memberCard']").val(), "mobilephones": $("input[name='phone']").val()},
+            type: "POST",
+            dataType: "json",
+            success: function (data) {
+                //    var a=JSON.stringify(data);
+
+                var memberNo = data.memberNo;
+
+                if (memberNo == "不存在") {
+                    resetk();
+                    $.modal.msgWarning("该卡片不存在！");
+
+
+                } else {
+                    var isRerurn = data.tMemberType.isRerurn;
+                    if (isRerurn == 1) {
+                        $.modal.msgWarning("该卡片不可退！");
+                    } else {
+                        $("input[name='memberCard']").val(data.memberNo);
+                        $("input[name='phone']").val(data.mobilephones);
+                        $("input[name='balanceChange']").val(data.balance);
+                        $("input[name='balanceChangeOne']").val(data.balance);
+                        $("input[name='memberNameNo']").val(data.memberName);
+                    }
+                }
+            }
+        });
+    }
+
+    function off(m) {
+        var memberCard = "";//会员卡号
+        var phone = "";//手机号
+        if (m == 1) {
+
+            memberCard = $("input[name='memberNo']").val();
+            phone = $("input[name='mobilephones']").val();
+
+        } else if (m == 0) {
+
+            memberCard = $("input[name='memberCard']").val()
+            phone = $("input[name='phone']").val()
+        }
+        if ((memberCard == null || memberCard == "") && (phone == null || phone == "")) {
+            $.modal.msgWarning("请输入卡号或者手机号！");
+            return;
+        }
+        $.post(prefix + "/offTMember", {"memberNo": memberCard, "phone": phone}, function (date) {
+
+            if (date.memberNo == "不存在") {
+                if (m == 1) {
+                    reset();
+                } else {
+                    resetk();
+                }
+
+                $.modal.msgWarning("该卡片不存在！");
+
+            } else {
+
+                if (date.state == 1) {
+                    $.modal.msgWarning("此卡已注销，无法进行此操作！");
+                } else if (date.isloss == 1) {
+                    $.modal.msgWarning("此卡已挂失，请先进行解失！");
+                } else {
+                    remove(m);
+                }
+            }
+        });
+    }
+
+    function remove(m) {
+
+        var balance = $("input[name='balance1']").val();
+        if (balance == null || balance == "") {
+            balance = 0;
+        }
+        if (m == 1) {
+            $.modal.confirm("确认要充值吗？", function () {
+                $.operate.post(prefix + "/update", {
+                    "memberNo": $("input[name='memberNo']").val(),
+                    "mobilephones": $("input[name='mobilephones']").val(),
+                    "balance": balance,
+                    "paytype": $('input:radio[name="paytype"]:checked').val(),
+                    "money": $(".heji").html(),
+                    "m": m
+                });
+                reset();
+            })
+        } else {
+            var memberCard = $("input[name='memberCard']").val();//会员卡号
+            var phone = $("input[name='phone']").val();//手机号
+            var balanceChangeOne = $("input[name='balanceChangeOne']").val();//金额
+            if (balanceChangeOne == null || balanceChangeOne == "") {
+                $.modal.msgWarning("请输入退款金额！");
+                return;
+            }
+            $.post(prefix + "/offTMember", {"memberNo": memberCard, "phone": phone}, function (date) {
+                if (balanceChangeOne > date.balance) {
+                    $.modal.msgWarning("退款金额超限，请查看现有余额！");
+                } else {
+                    $.modal.confirm("确认要退款吗？", function () {
+                        $.operate.post(prefix + "/update", {
+                            "memberNo": memberCard,
+                            "mobilephones": phone,
+                            "balance": balanceChangeOne,
+                            "m": m
+                        });
+                        resetk();
+                    })
+                }
+            });
+        }
+    }
+
+    function reset() {
+        $("input[name='memberNo']").val("");
+        $("input[name='mobilephones']").val("");
+        $("input[name='balance']").val("");
+        $("input[name='memberName']").val("");
+        $("input[name='balance1']").val("");
+        $(".heji").html("0.00");
+    }
+
+    function resetk() {
+        $("input[name='memberCard']").val("");
+        $("input[name='phone']").val("");
+        $("input[name='balanceChange']").val("");
+        $("input[name='balanceChangeOne']").val("");
+        $("input[name='memberNameNo']").val("");
+    }
+
+    function resetb() {
+        $("input[name='memberNoOne']").val("");
+        $("input[name='memberNoTwo']").val("");
+    }
+
+    function nowInDateBetwen(d1, d2) {
+        //如果时间格式是正确的，那下面这一步转化时间格式就可以不用了
+        // var dateBegin = new Date(d1.replace(/-/g, "/"));//将-转化为/，使用new Date
+        // var dateEnd = new Date(d2.replace(/-/g, "/"));//将-转化为/，使用new Date
+        var dateBegin = new Date(d1);//将-转化为/，使用new Date
+        var dateEnd = new Date(d2);//将-转化为/，使用new Date
+        var dateNow = new Date();//获取当前时间
+
+        var beginDiff = dateNow.getTime() - dateBegin.getTime();//时间差的毫秒数
+        var beginDayDiff = Math.floor(beginDiff / (24 * 3600 * 1000));//计算出相差天数
+
+        var endDiff = dateEnd.getTime() - dateNow.getTime();//时间差的毫秒数
+        var endDayDiff = Math.floor(endDiff / (24 * 3600 * 1000));//计算出相差天数
+        if (endDayDiff < 0) {//已过期
+            return false
+        }
+        if (beginDayDiff < 0) {//没到开始时间
+            return false;
+        }
+        return true;
+    }
+
+</script>
+</body>
+</html>

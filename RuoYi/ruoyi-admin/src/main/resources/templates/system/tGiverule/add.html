@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增奖励规则')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-tGiverule-add">
+        <input id="treeId" name="parentId" type="hidden" th:value="${dept.deptId}"/>
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">公司名称：</label>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <input class="form-control" type="text" onclick="selectDeptTree()" id="treeName" readonly="true"
+                           th:value="${dept.deptName}">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                </div>
+            </div>
+            <label class="col-sm-2 control-label">会员卡类型：</label>
+            <div class="col-sm-3">
+                <select name="cardtype" class="form-control m-b" id="cardtype">
+                    <option value=''>会员卡类型</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">开始金额：</label>
+            <div class="col-sm-3">
+                <input id="beginMoney" name="beginMoney" class="form-control" type="text">
+            </div>
+            <label class="col-sm-2 control-label">结束金额：</label>
+            <div class="col-sm-3">
+                <input id="andMoney" name="andMoney" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">开始时间：</label>
+            <div class="col-sm-3">
+                <input id="beginDate" name="beginDate" class="time-input" type="text">
+            </div>
+            <label class="col-sm-2 control-label">结束时间：</label>
+            <div class="col-sm-3">
+                <input id="andDate" name="andDate" class="time-input" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">赠送方式：</label>
+            <div class="col-sm-3">
+                <!--<input id="giveType" name="giveType" class="form-control" type="text">-->
+                <div class="input-group" style="width: 100%">
+                    <select name="giveType" class="form-control m-b" th:with="type=${@dict.getType('sys_give_rule')}"
+                            onchange="ZS()">
+                        <option value="">请选择赠送方式</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <label class="col-sm-2 control-label">赠送金额：</label>
+            <div class="col-sm-3">
+                <input id="giveMoney" name="giveMoney" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">实物奖励编号：</label>
+            <div class="col-sm-3">
+                <input id="givePxs" name="givePxs" class="form-control" type="text">
+            </div>
+            <label class="col-sm-2 control-label">领奖编号：</label>
+            <div class="col-sm-3">
+                <input id="ljType" name="ljType" class="form-control" type="text">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">数量：</label>
+            <div class="col-sm-3">
+                <input id="giveCount" name="giveCount" class="form-control" type="text">
+            </div>
+            <label class="col-sm-2 control-label">有效天数：</label>
+            <div class="col-sm-3">
+                <input id="yxts" name="yxts" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">百分比：(%)</label>
+            <div class="col-sm-3">
+                <input id="perCentage" name="perCentage" class="form-control" type="text">
+            </div>
+        </div>
+
+    </form>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript">
+    var prefix = ctx + "system/tGiverule"
+    var prefix2 = ctx + "system/tMemberType"
+    $("#form-tGiverule-add").validate({
+        rules: {
+            xxxx: {
+                required: true,
+            },
+        },
+        focusCleanup: true
+    });
+    $(function () {
+        $("input[name='giveMoney']").attr("disabled", true);
+        $("input[name='givePxs']").attr("disabled", true);
+        $("input[name='ljType']").attr("disabled", true);
+        $("input[name='giveCount']").attr("disabled", true);
+        $("input[name='yxts']").attr("disabled", true);
+        $("input[name='perCentage']").attr("disabled", true);
+    })
+
+    function ZS() {
+        var giveType = $("select[name='giveType']").val();
+        console.log(giveType)
+        if (giveType == "") {
+            f1();
+            f4();
+            f5();
+            $("input[name='giveMoney']").attr("disabled", true);
+            $("input[name='givePxs']").attr("disabled", true);
+            $("input[name='ljType']").attr("disabled", true);
+            $("input[name='giveCount']").attr("disabled", true);
+            $("input[name='yxts']").attr("disabled", true);
+            $("input[name='perCentage']").attr("disabled", true);
+        } else if (giveType == 0) {
+            f4();
+            f5();
+            $("input[name='giveMoney']").attr("disabled", false);
+            $("input[name='givePxs']").attr("disabled", true);
+            $("input[name='ljType']").attr("disabled", true);
+            $("input[name='giveCount']").attr("disabled", true);
+            $("input[name='yxts']").attr("disabled", true);
+            $("input[name='perCentage']").attr("disabled", true);
+        } else if (giveType == 1) {
+            f1();
+            f5();
+            $("input[name='giveMoney']").attr("disabled", true);
+            $("input[name='perCentage']").attr("disabled", true);
+            $("input[name='givePxs']").attr("disabled", false);
+            $("input[name='ljType']").attr("disabled", false);
+            $("input[name='giveCount']").attr("disabled", false);
+            $("input[name='yxts']").attr("disabled", false);
+        } else if (giveType == 2) {
+            f1();
+            f4();
+            $("input[name='giveMoney']").attr("disabled", true);
+            $("input[name='givePxs']").attr("disabled", true);
+            $("input[name='ljType']").attr("disabled", true);
+            $("input[name='giveCount']").attr("disabled", true);
+            $("input[name='yxts']").attr("disabled", true);
+            $("input[name='perCentage']").attr("disabled", false);
+        }
+    }
+
+    function f1() {
+        $("input[name='giveMoney']").html("");
+    }
+
+    function f4() {
+        $("input[name='givePxs']").html("");
+        $("input[name='ljType']").html("");
+        $("input[name='giveCount']").html("");
+        $("input[name='yxts']").html("");
+    }
+
+    function f5() {
+        $("input[name='perCentage']").html("");
+    }
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-tGiverule-add').serialize());
+        }
+    }
+
+    /*部门管理-新增-选择父部门树*/
+    function selectDeptTree() {
+        var options = {
+            title: '部门选择',
+            width: "380",
+            url: prefix + "/selectDeptTree/" + $("#treeId").val(),
+            callBack: doSubmit
+        };
+        $.modal.openOptions(options);
+    }
+
+    function doSubmit(index, layero) {
+        var body = layer.getChildFrame('body', index);
+        $("#treeId").val(body.find('#treeId').val());
+        $("#treeName").val(body.find('#treeName').val());
+        layer.close(index);
+        listTypeName();
+    }
+
+    function listTypeName() {
+        var id = $("#treeId").val();
+        $.post(prefix2 + "/TypeName", {"id": id}, function (date) {
+            console.log(date);
+            $("#cardtype").html("");
+            $("#cardtype").append("<option value=''>会员卡类型</option>");
+            for (i = 0; i < date.length; i++) {
+                $("#cardtype").append("<option value='" + date[i].id + "'>" + date[i].memberTypeName + "</option>");
+            }
+        });
+    }
+</script>
+</body>
+</html>

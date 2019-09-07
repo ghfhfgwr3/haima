@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TBalanceChangeMapper">
+
+    <resultMap type="TBalanceChange" id="TBalanceChangeResult">
+        <result property="id" column="id"/>
+        <result property="companyid" column="companyid"/>
+        <result property="memberNo" column="member_no"/>
+        <result property="operationTime" column="operation_time"/>
+        <result property="changeMoney" column="change_money"/>
+        <result property="complimentaryMoney" column="complimentary_money"/>
+        <result property="workerid" column="workerid"/>
+        <result property="state" column="state"/>
+        <result property="paytype" column="paytype"/>
+        <result property="payorderNO" column="payorder_no"/>
+        <result property="memo" column="Memo"/>
+        <association property="sysDept" column="dept_id" javaType="com.ruoyi.system.domain.SysDept"
+                     resultMap="deptResult"/>
+    </resultMap>
+
+    <resultMap id="deptResult" type="SysDept">
+        <id property="deptId" column="dept_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="status" column="dept_status"/>
+    </resultMap>
+
+    <sql id="selectTBalanceChangeVo">
+        select tb.id, tb.companyid,tb.operation_time,
+        tb.change_money, tb.complimentary_money,
+        tb.workerid, tb.state, tb.paytype, tb.payorder_no, tb.Memo ,d.dept_name,
+        tb.member_no,tb.companyid
+        from t_balance_change tb,sys_dept d
+    </sql>
+
+    <select id="selectTBalanceChangeList" parameterType="TBalanceChange" resultMap="TBalanceChangeResult">
+        <include refid="selectTBalanceChangeVo"/>
+        <where>
+
+            <if test="id != null ">and id = #{id}</if>
+            <if test="companyid != null ">and companyid = #{companyid}</if>
+            <if test="memberNo != null ">and member_no = #{memberNo}</if>
+            <!-- <if test="operationTime != null "> and operation_time = #{operationTime}</if>-->
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(tb.operation_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(tb.operation_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            <if test="changeMoney != null ">and change_money = #{changeMoney}</if>
+            <if test="complimentaryMoney != null ">and complimentary_money = #{complimentaryMoney}</if>
+            <if test="workerid != null  and workerid != '' ">and workerid = #{workerid}</if>
+            <if test="state != null ">and state = #{state}</if>
+            <if test="paytype != null ">and paytype = #{paytype}</if>
+            <if test="payorderNO != null  and payorderNO != '' ">and payorder_no = #{payorderNO}</if>
+            <if test="memo != null  and memo != '' ">and Memo = #{memo}</if>
+            <if test="sysDept.deptName != null  and sysDept.deptName != '' ">and d.dept_name = #{sysDept.deptName}</if>
+            and tb.companyid = d.dept_id
+            ${params.dataScope}
+            order by id desc
+        </where>
+    </select>
+
+    <select id="selectTBalanceChangeById" parameterType="Long" resultMap="TBalanceChangeResult">
+        <include refid="selectTBalanceChangeVo"/>
+        where id = #{id} and tb.companyid = d.dept_id
+    </select>
+
+    <!-- <insert id="insertTBalanceChange" parameterType="TBalanceChange" useGeneratedKeys="true" keyProperty="id">
+        insert into t_balance_change
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="operationTime != null  ">operation_time,</if>
+			<if test="changeMoney != null  ">change_money,</if>
+			<if test="complimentaryMoney != null  ">complimentary_money,</if>
+			<if test="workerid != null  and workerid != ''  ">workerid,</if>
+			<if test="state != null  ">state,</if>
+			<if test="paytype != null  ">paytype,</if>
+			<if test="payorderNO != null  and payorderNO != ''  ">payorderNO,</if>
+			<if test="memo != null  and memo != ''  ">Memo,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="operationTime != null  ">#{operationTime},</if>
+			<if test="changeMoney != null  ">#{changeMoney},</if>
+			<if test="complimentaryMoney != null  ">#{complimentaryMoney},</if>
+			<if test="workerid != null  and workerid != ''  ">#{workerid},</if>
+			<if test="state != null  ">#{state},</if>
+			<if test="paytype != null  ">#{paytype},</if>
+			<if test="payorderNO != null  and payorderNO != ''  ">#{payorderNO},</if>
+			<if test="memo != null  and memo != ''  ">#{memo},</if>
+         </trim>
+    </insert> -->
+
+    <insert id="insertTBalanceChange" parameterType="TBalanceChange" useGeneratedKeys="true" keyProperty="id">
+        insert into t_balance_change(
+        <if test="changeMoney != null  ">change_money,</if>
+        <if test="companyid != null  ">companyid,</if>
+        <if test="memberNo != null  ">member_no,</if>
+        <if test="complimentaryMoney != null  ">complimentary_money,</if>
+        <if test="workerid != null  and workerid != ''  ">workerid,</if>
+        <if test="state != null  ">state,</if>
+        <if test="paytype != null  ">paytype,</if>
+        <if test="payorderNO != null  and payorderNO != ''  ">payorder_no,</if>
+        <if test="memo != null  and memo != ''  ">Memo,</if>
+        operation_time
+        )values(
+        <if test="changeMoney != null  ">#{changeMoney},</if>
+        <if test="companyid != null  ">#{companyid},</if>
+        <if test="memberNo != null  ">#{memberNo},</if>
+        <if test="complimentaryMoney != null  ">#{complimentaryMoney},</if>
+        <if test="workerid != null  and workerid != ''  ">#{workerid},</if>
+        <if test="state != null  ">#{state},</if>
+        <if test="paytype != null  ">#{paytype},</if>
+        <if test="payorderNO != null  and payorderNO != ''  ">#{payorderNO},</if>
+        <if test="memo != null  and memo != ''  ">#{memo},</if>
+        sysdate()
+        )
+    </insert>
+    <update id="updateTBalanceChangeByMemberNo" parameterType="TBalanceChange">
+        update t_balance_change SET member_no = #{memberNoTwo}
+        where member_no = #{memberNoOne}
+    </update>
+
+    <update id="updateTBalanceChange" parameterType="TBalanceChange">
+        update t_balance_change
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="operationTime != null  ">operation_time = #{operationTime},</if>
+            <if test="companyid != null  ">companyid = #{companyid},</if>
+            <if test="memberNo != null  ">member_no = #{memberNo},</if>
+            <if test="changeMoney != null  ">change_money = #{changeMoney},</if>
+            <if test="complimentaryMoney != null  ">complimentary_money = #{complimentaryMoney},</if>
+            <if test="workerid != null  and workerid != ''  ">workerid = #{workerid},</if>
+            <if test="state != null  ">state = #{state},</if>
+            <if test="paytype != null  ">paytype = #{paytype},</if>
+            <if test="payorderNO != null  and payorderNO != ''  ">payorder_no = #{payorderNO},</if>
+            <if test="memo != null  and memo != ''  ">Memo = #{memo},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTBalanceChangeById" parameterType="Long">
+        delete from t_balance_change where id = #{id}
+    </delete>
+
+    <delete id="deleteTBalanceChangeByIds" parameterType="String">
+        delete from t_balance_change where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

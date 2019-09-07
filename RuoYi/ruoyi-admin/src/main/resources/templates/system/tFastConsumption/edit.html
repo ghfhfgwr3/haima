@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改会员')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-tMember-edit" th:object="${tMember}">
+        <input id="id" name="id" th:field="*{id}" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">旧会员卡号：</label>
+            <div class="col-sm-8">
+                <input id="memberNo" name="memberNo" th:field="*{memberNo}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">新会员卡号：</label>
+            <div class="col-sm-8">
+                <input id="memberNoTwo" name="memberNoTwo" class="form-control" type="text">
+            </div>
+        </div>
+    </form>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript">
+    var prefix = ctx + "system/recharge";
+    $("#form-tMember-edit").validate({
+        onkeyup: false,
+        rules: {
+            memberNo: {
+                remote: {
+                    url: prefix + "/checkTMemberIslossUnique",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        "id": function () {
+                            return $("input[id='id']").val();
+                        },
+                        "memberNo": function () {
+                            return $.common.trim($("#memberNo").val());
+                        }
+                    },
+                    dataFilter: function (data, type) {
+                        return $.validate.unique(data);
+                    }
+                }
+            },
+        },
+        messages: {
+            "memberNo": {
+                remote: "此卡未挂失,请先挂失！"
+            }
+        },
+        focusCleanup: true
+    });
+
+    /*$(function () {
+        $.ajax({
+            type:"post",
+            url: prefix + "/checkTMemberIslossUnique",
+            dataType:"json",
+            data: {
+                "id": function() {
+                    return $("input[id='id']").val();
+                },
+                "memberNo" : function() {
+                    return $.common.trim($("#memberNo").val());
+                }
+            },
+            success:function(data){
+            if(data.messages){
+                $("searchResult").html(data.msg);
+            }
+        },
+    });
+    })*/
+
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-tMember-edit').serialize());
+        }
+    }
+</script>
+</body>
+</html>

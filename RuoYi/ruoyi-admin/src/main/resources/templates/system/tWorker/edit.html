@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改员工')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-tWorker-edit" th:object="${tWorker}">
+        <input id="id" name="id" th:field="*{id}" type="hidden">
+        <input name="deptId" type="hidden" th:field="*{companyid}" id="treeId"/>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">公司名称：</label>
+
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <input class="form-control" type="text" onclick="selectDeptTree()" name="companyid" id="companyid"
+                           readonly="true" th:field="*{sysDept.deptName}">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                </div>
+            </div>
+            <!--</div>
+            <div class="form-group">-->
+            <label class="col-sm-2 control-label">是否离职：</label>
+            <div class="col-sm-3">
+                <input id="isLeave" name="isLeave" th:field="*{isLeave}" class="form-control" type="text">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">账号：</label>
+            <div class="col-sm-3">
+                <input id="loginNo" name="loginNo" th:field="*{loginNo}" class="form-control" type="text">
+            </div>
+            <!--</div>
+            <div class="form-group">	-->
+            <label class="col-sm-2 control-label">密码：</label>
+            <div class="col-sm-3">
+                <input id="loginPassword" name="loginPassword" th:field="*{loginPassword}" class="form-control"
+                       type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">工名：</label>
+            <div class="col-sm-3">
+                <input id="workerName" name="workerName" th:field="*{workerName}" class="form-control" type="text">
+            </div>
+            <!--</div>
+            <div class="form-group">	-->
+            <label class="col-sm-2 control-label">性别：</label>
+            <div class="col-sm-3">
+                <input id="workerSex" name="workerSex" th:field="*{workerSex}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">手机：</label>
+            <div class="col-sm-3">
+                <input id="mobile" name="mobile" th:field="*{mobile}" class="form-control" type="text">
+            </div>
+            <!--</div>
+            <div class="form-group">-->
+            <label class="col-sm-2 control-label">电子邮件：</label>
+            <div class="col-sm-3">
+                <input id="email" name="email" th:field="*{email}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">国家：</label>
+            <div class="col-sm-3">
+                <input id="nation" name="nation" th:field="*{nation}" class="form-control" type="text">
+            </div>
+            <!--</div>
+            <div class="form-group">	-->
+            <label class="col-sm-2 control-label">教育程度：</label>
+            <div class="col-sm-3">
+                <input id="education" name="education" th:field="*{education}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">家乡：</label>
+            <div class="col-sm-3">
+                <input id="homeTown" name="homeTown" th:field="*{homeTown}" class="form-control" type="text">
+            </div>
+            <!--</div>
+            <div class="form-group">	-->
+            <label class="col-sm-2 control-label">地址：</label>
+            <div class="col-sm-3">
+                <input id="address" name="address" th:field="*{address}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">邮编：</label>
+            <div class="col-sm-3">
+                <input id="postcode" name="postcode" th:field="*{postcode}" class="form-control" type="text">
+            </div>
+            <!--</div>
+            <div class="form-group">	-->
+            <label class="col-sm-2 control-label">ID卡号：</label>
+            <div class="col-sm-3">
+                <input id="iDCardno" name="iDCardno" th:field="*{iDCardno}" class="form-control" type="text">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">电话：</label>
+            <div class="col-sm-3">
+                <input id="telephone" name="telephone" th:field="*{telephone}" class="form-control" type="text">
+            </div>
+            <!--</div>
+
+            <div class="form-group">	-->
+            <label class="col-sm-2 control-label">薪水：</label>
+            <div class="col-sm-3">
+                <input id="salary" name="salary" th:field="*{salary}" class="form-control" type="text">
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <!--<label class="col-sm-2 control-label">入职时间：</label>
+            <div class="col-sm-3">
+                <input id="hiredate" name="hiredate" th:field="*{hiredateStr}" class="form-control" type="text">
+            </div>-->
+            <!--</div>
+            <div class="form-group">-->
+            <label class="col-sm-2 control-label">离职日期：</label>
+            <div class="col-sm-3">
+                <input id="leavedate" name="leavedate" th:field="*{leavedateStr}" class="time-input" type="text">
+            </div>
+            <label class="col-sm-2 control-label">工龄：</label>
+            <div class="col-sm-3">
+                <input id="workAge" name="workAge" th:field="*{workAge}" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+
+            <!--</div>
+            <div class="form-group">	-->
+            <label class="col-sm-2 control-label">备注：</label>
+            <div class="col-sm-8">
+                <input id="memo" name="memo" th:field="*{memo}" class="form-control" type="text">
+            </div>
+        </div>
+    </form>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript">
+    var prefix = ctx + "system/tWorker";
+    $("#form-tWorker-edit").validate({
+        rules: {
+            xxxx: {
+                required: true,
+            },
+        },
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-tWorker-edit').serialize());
+        }
+    }
+
+    /*用户管理-修改-选择部门树*/
+    function selectDeptTree() {
+        var deptId = $.common.isEmpty($("#treeId").val()) ? "100" : $("#treeId").val();
+        var url = prefix + "/selectDeptTree/" + deptId;
+        var options = {
+            title: '选择部门',
+            width: "380",
+            url: url,
+            callBack: doSubmit
+        };
+        $.modal.openOptions(options);
+    }
+
+    function doSubmit(index, layero) {
+        var tree = layero.find("iframe")[0].contentWindow.$._tree;
+        if ($.tree.notAllowParents(tree)) {
+            var body = layer.getChildFrame('body', index);
+            $("#treeId").val(body.find('#treeId').val());
+            $("#treeName").val(body.find('#treeName').val());
+            layer.close(index);
+        }
+    }
+</script>
+</body>
+</html>

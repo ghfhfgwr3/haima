@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TMemberConsumeMapper">
+
+    <resultMap type="TMemberConsume" id="TMemberConsumeResult">
+        <result property="id" column="id"/>
+        <result property="companyid" column="companyid"/>
+        <result property="djh" column="djh"/>
+        <result property="cardno" column="cardno"/>
+        <result property="phone" column="phone"/>
+        <result property="memberName" column="member_name"/>
+        <result property="consumeType" column="consume_type"/>
+        <result property="consumeTime" column="consume_time"/>
+        <result property="oprator" column="oprator"/>
+        <result property="totalMoney" column="total_money"/>
+        <result property="money" column="money"/>
+        <result property="paytype" column="paytype"/>
+        <result property="cardType" column="card_type"/>
+        <result property="cardpay" column="cardpay"/>
+        <result property="cashpay" column="cashpay"/>
+        <result property="bankpay" column="bankpay"/>
+        <result property="centpay" column="centpay"/>
+        <result property="cashcoupon" column="cashcoupon"/>
+        <result property="moling" column="moling"/>
+        <result property="realMoney" column="real_money"/>
+        <association property="sysDept" column="dept_id" javaType="com.ruoyi.system.domain.SysDept"
+                     resultMap="deptResult"/>
+    </resultMap>
+    <resultMap id="deptResult" type="SysDept">
+        <id property="deptId" column="dept_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="status" column="dept_status"/>
+    </resultMap>
+    <sql id="selectTMemberConsumeVo">
+        select tc.id, tc.companyid, tc.djh, tc.cardno, tc.phone, tc.member_name,
+        tc.consume_type, tc.consume_time, tc.oprator, tc.total_money, tc.money,
+        tc.paytype, tc.card_type, tc.cardpay, tc.cashpay, tc.bankpay, tc.centpay,
+        tc.cashcoupon, tc.moling, tc.real_money ,d.dept_name from t_member_consume
+        tc,sys_dept d
+    </sql>
+
+    <select id="selectTMemberConsumeList" parameterType="TMemberConsume" resultMap="TMemberConsumeResult">
+        <include refid="selectTMemberConsumeVo"/>
+        <where>
+            <if test="id != null ">and id = #{id}</if>
+            <if test="companyid != null ">and companyid = #{companyid}</if>
+            <if test="djh != null  and djh != '' ">and djh = #{djh}</if>
+            <if test="cardno != null  and cardno != '' ">and cardno = #{cardno}</if>
+            <if test="phone != null  and phone != '' ">and phone = #{phone}</if>
+            <if test="memberName != null  and memberName != '' ">and member_name = #{memberName}</if>
+            <if test="consumeType != null  and consumeType != '' ">and consume_type = #{consumeType}</if>
+            <!-- <if test="consumeTime != null "> and consume_time = #{consumeTime}</if>-->
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(tc.consume_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(tc.consume_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+            <if test="oprator != null  and oprator != '' ">and oprator = #{oprator}</if>
+            <if test="totalMoney != null  and totalMoney != '' ">and total_money = #{totalMoney}</if>
+            <if test="money != null  and money != '' ">and money = #{money}</if>
+            <if test="paytype != null  and paytype != '' ">and paytype = #{paytype}</if>
+            <if test="cardType != null  and cardType != '' ">and card_type = #{cardType}</if>
+            <if test="cardpay != null ">and cardpay = #{cardpay}</if>
+            <if test="cashpay != null ">and cashpay = #{cashpay}</if>
+            <if test="bankpay != null ">and bankpay = #{bankpay}</if>
+            <if test="centpay != null ">and centpay = #{centpay}</if>
+            <if test="cashcoupon != null ">and cashcoupon = #{cashcoupon}</if>
+            <if test="moling != null ">and moling = #{moling}</if>
+            <if test="realMoney != null ">and real_money = #{realMoney}</if>
+            ${params.dataScope}
+            and tc.companyid = d.dept_id order by id desc
+        </where>
+    </select>
+
+    <select id="selectTMemberConsumeById" parameterType="Long" resultMap="TMemberConsumeResult">
+        <include refid="selectTMemberConsumeVo"/>
+        where id = #{id} and tc.companyid = d.dept_id
+    </select>
+
+    <insert id="insertTMemberConsume" parameterType="TMemberConsume" useGeneratedKeys="true" keyProperty="id">
+        insert into t_member_consume
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="companyid != null  ">companyid,</if>
+            <if test="djh != null  and djh != ''  ">djh,</if>
+            <if test="cardno != null  and cardno != ''  ">cardno,</if>
+            <if test="phone != null  and phone != ''  ">phone,</if>
+            <if test="memberName != null  and memberName != ''  ">member_name,</if>
+            <if test="consumeType != null  and consumeType != ''  ">consume_type,</if>
+            <if test="consumeTime != null  ">consume_time,</if>
+            <if test="oprator != null  and oprator != ''  ">oprator,</if>
+            <if test="totalMoney != null  and totalMoney != ''  ">total_money,</if>
+            <if test="money != null  and money != ''  ">money,</if>
+            <if test="paytype != null  and paytype != ''  ">paytype,</if>
+            <if test="cardType != null  and cardType != ''  ">card_type,</if>
+            <if test="cardpay != null  ">cardpay,</if>
+            <if test="cashpay != null  ">cashpay,</if>
+            <if test="bankpay != null  ">bankpay,</if>
+            <if test="centpay != null  ">centpay,</if>
+            <if test="cashcoupon != null  ">cashcoupon,</if>
+            <if test="moling != null  ">moling,</if>
+            <if test="realMoney != null  ">real_money,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="companyid != null  ">#{companyid},</if>
+            <if test="djh != null  and djh != ''  ">#{djh},</if>
+            <if test="cardno != null  and cardno != ''  ">#{cardno},</if>
+            <if test="phone != null  and phone != ''  ">#{phone},</if>
+            <if test="memberName != null  and memberName != ''  ">#{memberName},</if>
+            <if test="consumeType != null  and consumeType != ''  ">#{consumeType},</if>
+            <if test="consumeTime != null  ">#{consumeTime},</if>
+            <if test="oprator != null  and oprator != ''  ">#{oprator},</if>
+            <if test="totalMoney != null  and totalMoney != ''  ">#{totalMoney},</if>
+            <if test="money != null  and money != ''  ">#{money},</if>
+            <if test="paytype != null  and paytype != ''  ">#{paytype},</if>
+            <if test="cardType != null  and cardType != ''  ">#{cardType},</if>
+            <if test="cardpay != null  ">#{cardpay},</if>
+            <if test="cashpay != null  ">#{cashpay},</if>
+            <if test="bankpay != null  ">#{bankpay},</if>
+            <if test="centpay != null  ">#{centpay},</if>
+            <if test="cashcoupon != null  ">#{cashcoupon},</if>
+            <if test="moling != null  ">#{moling},</if>
+            <if test="realMoney != null  ">#{realMoney},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTMemberConsume" parameterType="TMemberConsume">
+        update t_member_consume
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companyid != null  ">companyid = #{companyid},</if>
+            <if test="djh != null  and djh != ''  ">djh = #{djh},</if>
+            <if test="cardno != null  and cardno != ''  ">cardno = #{cardno},</if>
+            <if test="phone != null  and phone != ''  ">phone = #{phone},</if>
+            <if test="memberName != null  and memberName != ''  ">member_name = #{memberName},</if>
+            <if test="consumeType != null  and consumeType != ''  ">consume_type = #{consumeType},</if>
+            <if test="consumeTime != null  ">consume_time = #{consumeTime},</if>
+            <if test="oprator != null  and oprator != ''  ">oprator = #{oprator},</if>
+            <if test="totalMoney != null  and totalMoney != ''  ">total_money = #{totalMoney},</if>
+            <if test="money != null  and money != ''  ">money = #{money},</if>
+            <if test="paytype != null  and paytype != ''  ">paytype = #{paytype},</if>
+            <if test="cardType != null  and cardType != ''  ">card_type = #{cardType},</if>
+            <if test="cardpay != null  ">cardpay = #{cardpay},</if>
+            <if test="cashpay != null  ">cashpay = #{cashpay},</if>
+            <if test="bankpay != null  ">bankpay = #{bankpay},</if>
+            <if test="centpay != null  ">centpay = #{centpay},</if>
+            <if test="cashcoupon != null  ">cashcoupon = #{cashcoupon},</if>
+            <if test="moling != null  ">moling = #{moling},</if>
+            <if test="realMoney != null  ">real_money = #{realMoney},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTMemberConsumeById" parameterType="Long">
+        delete from t_member_consume where id = #{id}
+    </delete>
+
+    <delete id="deleteTMemberConsumeByIds" parameterType="String">
+        delete from t_member_consume where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

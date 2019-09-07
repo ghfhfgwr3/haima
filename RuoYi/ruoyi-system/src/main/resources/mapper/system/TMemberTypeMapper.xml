@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TMemberTypeMapper">
+
+    <resultMap type="TMemberType" id="TMemberTypeResult">
+        <result property="id" column="id"/>
+        <result property="companyid" column="companyid"/>
+        <result property="memberTypeName" column="member_type_name"/>
+        <result property="discount" column="discount"/>
+        <result property="validDays" column="valid_days"/>
+        <result property="isMemberPrice" column="is_member_price"/>
+        <result property="isPoints" column="is_points"/>
+        <result property="isRerurn" column="is_rerurn"/>
+        <result property="isM1" column="is_m1"/>
+        <result property="maxConsume" column="max_consume"/>
+        <result property="makeUpCost" column="make_up_cost"/>
+        <result property="isEncourage" column="is_encourage"/>
+        <result property="isAllowother" column="is_allowother"/>
+        <result property="memo" column="memo"/>
+        <result property="points_rule" column="points_rule"/>
+        <result property="deptName" column="deptName"/>
+        <association property="sysDept" column="dept_id" javaType="com.ruoyi.system.domain.SysDept"
+                     resultMap="deptResult"/>
+        <association property="giverule" column="id" javaType="com.ruoyi.system.domain.TGiverule"
+                     resultMap="TGiveruleResult"/>
+    </resultMap>
+
+    <resultMap id="deptResult" type="SysDept">
+        <id property="deptId" column="dept_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="orderNum" column="order_num"/>
+        <result property="status" column="dept_status"/>
+    </resultMap>
+    <resultMap type="TGiverule" id="TGiveruleResult">
+        <result property="id" column="id"/>
+        <result property="companyid" column="companyid"/>
+        <result property="cardtype" column="cardtype"/>
+        <result property="beginMoney" column="begin_money"/>
+        <result property="andMoney" column="and_money"/>
+        <result property="giveType" column="give_type"/>
+        <result property="giveMoney" column="give_money"/>
+        <result property="beginDate" column="begin_date"/>
+        <result property="andDate" column="and_date"/>
+        <result property="givePxs" column="give_pxs"/>
+        <result property="ljType" column="lj_type"/>
+        <result property="giveCount" column="give_count"/>
+        <result property="yxts" column="yxts"/>
+    </resultMap>
+
+    <sql id="selectTMemberTypeVo">
+        select tm.id, tm.companyid, tm.member_type_name,
+        tm.discount, tm.valid_days, tm.is_member_price,
+        tm.is_points, tm.is_rerurn, tm.is_m1, tm.max_consume,
+        tm.make_up_cost, tm.is_encourage, tm.is_allowother,
+        tm.memo,tm.points_rule,d.dept_name
+        from t_member_type tm,sys_dept d
+    </sql>
+
+    <select id="checkDeptNameUnique" resultMap="TMemberTypeResult">
+        SELECT * FROM t_member_type tm
+        where tm.member_type_name=#{memberTypeName} and tm.companyid = #{companyid}
+    </select>
+
+    <select id="selectTMemberTypeList" parameterType="TMemberType" resultMap="TMemberTypeResult">
+        <include refid="selectTMemberTypeVo"/>
+        <where>
+            <if test="sysDept.deptName != null  and sysDept.deptName != ''  ">and d.dept_name = #{sysDept.deptName}</if>
+            and tm.companyid = d.dept_id
+            ${params.dataScope}
+        </where>
+    </select>
+
+    <select id="selectTMemberTypeByCompanyId" parameterType="Integer" resultMap="TMemberTypeResult">
+        <include refid="selectTMemberTypeVo"/>
+        where tm.companyid = #{companyid}
+    </select>
+
+    <select id="selectTMemberTypeListAndMemberTypeName" parameterType="TMemberType" resultMap="TMemberTypeResult">
+        SELECT tm.member_type_name,tm.id
+        FROM t_member_type tm ,sys_dept d
+        <where>
+            tm.companyid = d.dept_id
+        </where>
+    </select>
+
+    <select id="selectTMemberTypeById" parameterType="Integer" resultMap="TMemberTypeResult">
+        <include refid="selectTMemberTypeVo"/>
+        where tm.id = #{id} and tm.companyid = d.dept_id
+    </select>
+
+    <insert id="insertTMemberType" parameterType="TMemberType">
+        insert into t_member_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  ">id,</if>
+            <if test="companyid != null  ">companyid,</if>
+            <if test="memberTypeName != null  and memberTypeName != ''  ">member_type_name,</if>
+            <if test="discount != null  ">discount,</if>
+            <if test="validDays != null  ">valid_days,</if>
+            <if test="isMemberPrice != null  ">is_member_price,</if>
+            <if test="isPoints != null  ">is_points,</if>
+            <if test="isRerurn != null  ">is_rerurn,</if>
+            <if test="isM1 != null  ">is_m1,</if>
+            <if test="maxConsume != null  ">max_consume,</if>
+            <if test="makeUpCost != null  ">make_up_cost,</if>
+            <if test="isEncourage != null  ">is_encourage,</if>
+            <if test="isAllowother != null  ">is_allowother,</if>
+            <if test="memo != null  and memo != ''  ">memo,</if>
+            <if test="points_rule != null  and points_rule != ''  ">points_rule,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  ">#{id},</if>
+            <if test="companyid != null  ">#{companyid},</if>
+            <if test="memberTypeName != null  and memberTypeName != ''  ">#{memberTypeName},</if>
+            <if test="discount != null  ">#{discount},</if>
+            <if test="validDays != null  ">#{validDays},</if>
+            <if test="isMemberPrice != null  ">#{isMemberPrice},</if>
+            <if test="isPoints != null  ">#{isPoints},</if>
+            <if test="isRerurn != null  ">#{isRerurn},</if>
+            <if test="isM1 != null  ">#{isM1},</if>
+            <if test="maxConsume != null  ">#{maxConsume},</if>
+            <if test="makeUpCost != null  ">#{makeUpCost},</if>
+            <if test="isEncourage != null  ">#{isEncourage},</if>
+            <if test="isAllowother != null  ">#{isAllowother},</if>
+            <if test="memo != null  and memo != ''  ">#{memo},</if>
+            <if test="points_rule != null  and points_rule != ''  ">#{points_rule},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTMemberType" parameterType="TMemberType">
+        update t_member_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companyid != null  ">companyid = #{companyid},</if>
+            <if test="memberTypeName != null  and memberTypeName != ''  ">member_type_name = #{memberTypeName},</if>
+            <if test="discount != null  ">discount = #{discount},</if>
+            <if test="validDays != null  ">valid_days = #{validDays},</if>
+            <if test="isMemberPrice != null  ">is_member_price = #{isMemberPrice},</if>
+            <if test="isPoints != null  ">is_points = #{isPoints},</if>
+            <if test="isRerurn != null  ">is_rerurn = #{isRerurn},</if>
+            <if test="isM1 != null  ">is_m1 = #{isM1},</if>
+            <if test="maxConsume != null  ">max_consume = #{maxConsume},</if>
+            <if test="makeUpCost != null  ">make_up_cost = #{makeUpCost},</if>
+            <if test="isEncourage != null  ">is_encourage = #{isEncourage},</if>
+            <if test="isAllowother != null  ">is_allowother = #{isAllowother},</if>
+            <if test="memo != null  and memo != ''  ">memo = #{memo},</if>
+            <if test="points_rule != null  and points_rule != ''  ">points_rule = #{points_rule},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateTMemberTypeAndStatus" parameterType="TMemberType">
+        update t_member_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="isMemberPrice != null  ">is_member_price = #{isMemberPrice},</if>
+            <if test="isPoints != null  ">is_points = #{isPoints},</if>
+            <if test="isRerurn != null  ">is_rerurn = #{isRerurn},</if>
+            <if test="isM1 != null  ">is_m1 = #{isM1},</if>
+            <if test="isEncourage != null  ">is_encourage = #{isEncourage},</if>
+            <if test="isAllowother != null  ">is_allowother = #{isAllowother},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTMemberTypeById" parameterType="Integer">
+        delete from t_member_type where id = #{id}
+    </delete>
+
+    <delete id="deleteTMemberTypeByIds" parameterType="String">
+        delete from t_member_type where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增会员')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontalm" id="form-tMember-add">
+        <input id="treeId" name="companyid" type="hidden" th:value="${dept.deptId}"/>
+        <div class="form-group">
+            <label class="col-sm-2 control-label ">公司名称：</label>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <input class="form-control" type="text" onclick="selectDeptTree()" id="treeName" readonly="true"
+                           th:value="${dept.deptName}">
+                    <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                </div>
+            </div>
+
+
+            <label class="col-sm-2 control-label">会员类型：</label>
+            <div class="form-group">
+
+                <div class="col-sm-3">
+                    <select name="memberTypeId" class="form-control m-b" id="memberTypeName">
+                        <option value=''>会员卡类型</option>
+                    </select>
+                </div>
+
+            </div>
+
+
+            <!--	</div>-->
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label"><span style="color: red; ">*</span>会员卡号：</label>
+                <div class="col-sm-3">
+                    <input autocomplete="off" placeholder="请输入卡号" id="memberNo" name="memberNo" class="form-control"
+                           type="text" required>
+                </div>
+                <!--</div>-->
+                <!--<div class="form-group">	-->
+                <label class="col-sm-2 control-label"><span style="color: red; ">*</span>会员卡ID：</label>
+                <div class="col-sm-3">
+                    <input id="cardid" name="cardid" class="form-control" type="text" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label"></span>会员卡密码：</label>
+                <div class="col-sm-3">
+                    <!--<input id="password" name="password" class="form-control" type="text">-->
+                    <input id="password" name="password" autocomplete="off" class="form-control" type="password"
+                           th:value="${@config.getKey('sys.user.initPassword')}">
+                </div>
+                <!--</div>
+                <div class="form-group">-->
+                <!--                <label class="col-sm-2 control-label">有效期：</label>-->
+                <!--                <div class="col-sm-3">-->
+                <!--                    <input id="expirydate" name="expirydate" class="form-control" type="text">-->
+                <!--                </div>-->
+                <label class="col-sm-2 control-label">会员姓名：</label>
+                <div class="col-sm-3">
+                    <input id="memberName" name="memberName" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <!--</div>-->
+                <!--<div class="form-group">	-->
+                <label class="col-sm-2 control-label"><span style="color: red; ">*</span>会员电话：</label>
+                <div class="col-sm-3">
+                    <input id="mobilephones" name="mobilephones" class="form-control" type="text">
+                </div>
+                <label class="col-sm-2 control-label">卡现有余额：</label>
+                <div class="col-sm-3">
+                    <input id="balance" name="balance" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <!--</div>
+                <div class="form-group">	-->
+                <label class="col-sm-2 control-label">奖励金额：</label>
+                <div class="col-sm-3">
+                    <input id="complimentaryMoney" name="complimentaryMoney" class="form-control" type="text">
+                </div>
+                <label class="col-sm-2 control-label">是否含计次：</label>
+                <div class="col-sm-3">
+                    <label class="toggle-switch switch-solid">
+                        <input type="checkbox" id="haveCount">
+                        <span></span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <!--</div>-->
+                <!--<div class="form-group">
+                    <label class="col-sm-3 control-label">是否有计次品相：</label>
+                    <div class="col-sm-8">
+                        <input id="haveCount" name="haveCount" class="form-control" type="text">
+                    </div>
+                </div>-->
+                <!--<div class="form-group">
+                    <label class="col-sm-3 control-label">办卡时间：</label>
+                    <div class="col-sm-8">
+                        <input id="addDatetime" name="addDatetime" class="form-control" type="text">
+                    </div>
+                </div>-->
+                <!--<div class="form-group">-->
+                <label class="col-sm-2 control-label">是否挂失：</label>
+                <div class="col-sm-3">
+                    <label class="toggle-switch switch-solid">
+                        <input type="checkbox" id="isloss" checked>
+                        <span></span>
+                    </label>
+                </div>
+                <!--</div>
+
+                <div class="form-group">-->
+
+                <label class="col-sm-2 control-label">是否注销：</label>
+                <div class="col-sm-3">
+                    <label class="toggle-switch switch-solid">
+                        <input type="checkbox" id="state" checked>
+                        <span></span>
+                    </label>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">积分：</label>
+                <div class="col-sm-3">
+                    <input id="points" name="points" class="form-control" type="text">
+                </div>
+                <!--</div>
+
+                <div class="form-group">	-->
+                <label class="col-sm-2 control-label">手续费：</label>
+                <div class="col-sm-3">
+                    <input id="commission" name="commission" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">用户性别：</label>
+                <div class="col-sm-3">
+                    <div class="input-group" style="width: 100%">
+                        <select name="sex" class="form-control m-b" th:with="type=${@dict.getType('sys_user_sex')}">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                    th:value="${dict.dictValue}"></option>
+                        </select>
+                    </div>
+                </div>
+                <!--</div>
+                <div class="form-group">-->
+                <label class="col-sm-2 control-label">用户生日： </label>
+                <div class="col-sm-3">
+                    <input type="text" class="time-input" id="birtdate" name="params[birtdate]"/>
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">出生日期：</label>
+                <div class="col-sm-8">
+                    <input id="birtdate" name="birtdate" class="form-control" type="text">
+                </div>
+            </div>-->
+            <!--<div class="form-group">
+                <label class="col-sm-3 control-label">性别：</label>
+                <div class="col-sm-8">
+                    <input id="sex" name="sex" class="form-control" type="text">
+                </div>
+            </div>-->
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">国家：</label>
+                <div class="col-sm-3">
+                    <input id="nation" name="nation" class="form-control" type="text">
+                </div>
+                <!--</div>
+                <div class="form-group">	-->
+                <label class="col-sm-2 control-label">血型：</label>
+                <div class="col-sm-3">
+                    <input id="blood" name="blood" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">身高：</label>
+                <div class="col-sm-3">
+                    <input id="stature" name="stature" class="form-control" type="text">
+                </div>
+                <!--</div>
+                <div class="form-group">	-->
+                <label class="col-sm-2 control-label">体重：</label>
+                <div class="col-sm-3">
+                    <input id="weight" name="weight" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">职业：</label>
+                <div class="col-sm-3">
+                    <input id="carrer" name="carrer" class="form-control" type="text">
+                </div>
+                <!--</div>
+                <div class="form-group">	-->
+                <label class="col-sm-2 control-label">教育程度：</label>
+                <div class="col-sm-3">
+                    <input id="education" name="education" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">ID卡号：</label>
+                <div class="col-sm-3">
+                    <input id="iDcardno" name="iDcardno" class="form-control" type="text">
+                </div>
+                <!--		</div>
+                        <div class="form-group">	-->
+                <label class="col-sm-2 control-label">电话：</label>
+                <div class="col-sm-3">
+                    <input id="telephone" name="telephone" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">电子邮件：</label>
+                <div class="col-sm-3">
+                    <input id="email" name="email" class="form-control" type="text">
+                </div>
+                <!--	</div>
+
+                    <div class="form-group">	-->
+                <label class="col-sm-2 control-label">邮编：</label>
+                <div class="col-sm-3">
+                    <input id="postcode" name="postcode" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">地址：</label>
+                <div class="col-sm-8" id="distpicker3">
+                    <select name="province"></select>
+                    <select name="city"></select>
+                    <select name="area"></select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">详细地址：</label>
+                <div class="col-sm-8">
+                    <input id="address" name="address" class="form-control" type="text">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input id="memo" name="memo" class="form-control" type="text">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript">
+    var prefix = ctx + "system/tMember"
+    var prefix2 = ctx + "system/tMemberType"
+    $("#form-tMember-add").validate({
+        onkeyup: false,
+        rules: {
+            deptName: {
+                remote: {
+                    url: prefix + "/checkDeptNameUnique",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        "companyid": function () {
+                            return $("input[name='companyid']").val();
+                        },
+                        "deptName": function () {
+                            return $.common.trim($("#deptName").val());
+                        }
+                    },
+                    dataFilter: function (data, type) {
+                        return $.validate.unique(data);
+                    }
+                }
+            },
+            memberNo: {
+                remote: {
+                    url: prefix + "/checkCardNoUnique",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        "companyid": function () {
+                            return $("input[id='treeId']").val();
+                        },
+                        "memberTypeId": function () {
+                            return $("select[id='memberTypeName']").val();
+                        },
+                        "memberNo": function () {
+                            return $.common.trim($("#memberNo").val());
+                        }
+
+                    },
+                    dataFilter: function (data, type) {
+                        return $.validate.unique(data);
+                    }
+                }
+            },
+            mobilephones: {
+                remote: {
+                    url: prefix + "/checkPhoneUnique",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        "companyid": function () {
+                            return $("input[id='treeId']").val();
+                        },
+                        "memberTypeId": function () {
+                            return $("select[id='memberTypeName']").val();
+                        },
+                        "mobilephones": function () {
+                            return $.common.trim($("#mobilephones").val());
+                        }
+
+                    },
+                    dataFilter: function (data, type) {
+                        return $.validate.unique(data);
+                    }
+                }
+            },
+            orderNum: {
+                digits: true
+            },
+            email: {
+                email: true,
+            },
+            phone: {
+                isPhone: true,
+            },
+        },
+        messages: {
+            "deptName": {
+                remote: "部门已经存在"
+            },
+            "memberNo": {
+                remote: "该卡号已存在"
+            },
+            "mobilephones": {
+                remote: "已存在"
+            }
+        },
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-tMember-add').serialize());
+        }
+    }
+
+    /*部门管理-新增-选择父部门树*/
+    function selectDeptTree() {
+        var options = {
+            title: '部门选择',
+            width: "380",
+            url: prefix + "/selectDeptTree/" + $("#treeId").val(),
+            callBack: doSubmit
+        };
+        $.modal.openOptions(options);
+    }
+
+    $("#distpicker3").distpicker({
+        province: "河北省",
+        city: "石家庄市",
+        district: "裕华区"
+    });
+
+    //查询卡类型
+    function selectCardtype() {
+        var options = {
+            url: prefix2 + "/list/" + $("#treeId").val(),
+
+        }
+
+    }
+
+    function doSubmit(index, layero) {
+        var body = layer.getChildFrame('body', index);
+        $("#treeId").val(body.find('#treeId').val());
+        $("#treeName").val(body.find('#treeName').val());
+        layer.close(index);
+        listTypeName();
+    }
+
+    function listTypeName() {
+        var id = $("#treeId").val();
+        $.post(prefix2 + "/TypeName", {"id": id}, function (date) {
+            $("#memberTypeName").html("");
+            $("#memberTypeName").append("<option value=''>会员卡类型</option>");
+            for (i = 0; i < date.length; i++) {
+
+                $("#memberTypeName").append("<option value='" + date[i].id + "'>" + date[i].memberTypeName + "</option>");
+            }
+        });
+    }
+</script>
+</body>
+</html>

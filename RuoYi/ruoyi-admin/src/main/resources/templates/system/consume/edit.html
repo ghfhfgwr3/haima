@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('修改消费记录')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-consume-edit" th:object="${consume}">
+        <input id="id" name="id" th:field="*{id}"
+               type="hidden">
+                                                                            <div class="form-group">
+                        <label class="col-sm-3 control-label">时间：</label>
+                        <div class="col-sm-8">
+                            <input id="time" name="time" th:field="*{time}"
+                                   class="form-control" type="text">
+                        </div>
+                    </div>
+                                                                                    <div class="form-group">
+                        <label class="col-sm-3 control-label">流水号：</label>
+                        <div class="col-sm-8">
+                            <input id="serialNumber" name="serialNumber" th:field="*{serialNumber}"
+                                   class="form-control" type="text">
+                        </div>
+                    </div>
+                                                                                    <div class="form-group">
+                        <label class="col-sm-3 control-label">会员卡号：</label>
+                        <div class="col-sm-8">
+                            <input id="tMemberId" name="tMemberId" th:field="*{tMemberId}"
+                                   class="form-control" type="text">
+                        </div>
+                    </div>
+                                                                                    <div class="form-group">
+                        <label class="col-sm-3 control-label">本次消费：</label>
+                        <div class="col-sm-8">
+                            <input id="localExpense" name="localExpense" th:field="*{localExpense}"
+                                   class="form-control" type="text">
+                        </div>
+                    </div>
+                                                                                    <div class="form-group">
+                        <label class="col-sm-3 control-label">消费前余额：</label>
+                        <div class="col-sm-8">
+                            <input id="preExpenseBalance" name="preExpenseBalance" th:field="*{preExpenseBalance}"
+                                   class="form-control" type="text">
+                        </div>
+                    </div>
+                                                                                    <div class="form-group">
+                        <label class="col-sm-3 control-label">消费后余额：</label>
+                        <div class="col-sm-8">
+                            <input id="postExpenseBalance" name="postExpenseBalance" th:field="*{postExpenseBalance}"
+                                   class="form-control" type="text">
+                        </div>
+                    </div>
+                                                                                    <div class="form-group">
+                        <label class="col-sm-3 control-label">设备ID：</label>
+                        <div class="col-sm-8">
+                            <input id="equipmentId" name="equipmentId" th:field="*{equipmentId}"
+                                   class="form-control" type="text">
+                        </div>
+                    </div>
+                                                                                    <div class="form-group">
+                        <label class="col-sm-3 control-label">状态标识：</label>
+                        <div class="col-sm-8">
+                            <input id="stateID" name="stateID" th:field="*{stateID}"
+                                   class="form-control" type="text">
+                        </div>
+                    </div>
+                                        </form>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript">
+    var prefix = ctx + "system/consume";
+    $("#form-consume-edit").validate({
+        rules: {
+            xxxx: {
+                required: true,
+            },
+        },
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit", $('#form-consume-edit').serialize());
+        }
+    }
+</script>
+</body>
+</html>

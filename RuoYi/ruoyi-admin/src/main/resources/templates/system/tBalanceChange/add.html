@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增会员余额的增加和减少')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-tBalanceChange-add">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">操作时间：</label>
+            <div class="col-sm-8">
+                <input id="operationTime" name="operationTime" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">变化金额：</label>
+            <div class="col-sm-8">
+                <input id="changeMoney" name="changeMoney" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">奖励金额：</label>
+            <div class="col-sm-8">
+                <input id="complimentaryMoney" name="complimentaryMoney" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">员工工号：</label>
+            <div class="col-sm-8">
+                <input id="workerid" name="workerid" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">状态：</label>
+            <div class="col-sm-8">
+                <input id="state" name="state" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">付款方式：</label>
+            <div class="col-sm-8">
+                <input id="paytype" name="paytype" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">订单号：</label>
+            <div class="col-sm-8">
+                <input id="payorderNO" name="payorderNO" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">备注：</label>
+            <div class="col-sm-8">
+                <input id="memo" name="memo" class="form-control" type="text">
+            </div>
+        </div>
+    </form>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript">
+    var prefix = ctx + "system/tBalanceChange"
+    $("#form-tBalanceChange-add").validate({
+        rules: {
+            xxxx: {
+                required: true,
+            },
+        },
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-tBalanceChange-add').serialize());
+        }
+    }
+</script>
+</body>
+</html>

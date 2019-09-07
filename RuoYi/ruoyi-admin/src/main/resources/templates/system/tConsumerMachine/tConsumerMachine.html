@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('消费机列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								商户信息：<input type="text" name="shopInfo"/>
+							</li>
+
+							<li>
+								商户编号：<input type="text" name="shopNum"/>
+							</li>
+
+							<li>
+								卡密：<input type="text" name="kalman"/>
+							</li>
+
+							<li>
+								本设备模式：<input type="text" name="devMode"/>
+							</li>
+
+							<li>
+								服务器域名：<input type="text" name="domain"/>
+							</li>
+
+							<li>
+								端口号：<input type="text" name="port"/>
+							</li>
+
+							<li>
+								最大消费金额：<input type="text" name="maxMoney"/>
+							</li>
+
+							<li>
+								押金：<input type="text" name="deposit"/>
+							</li>
+
+							<li>
+								当次限额：<input type="text" name="current"/>
+							</li>
+
+							<li>
+								卡标示：<input type="text" name="cardLabeling"/>
+							</li>
+
+							<li>
+								折扣：<input type="text" name="discount"/>
+							</li>
+
+							<li>
+								卡类型：<input type="text" name="cardType"/>
+							</li>
+
+							<li>
+								本设备名称：<input type="text" name="devName"/>
+							</li>
+
+							<li>
+								升级文件目录及信息：<input type="text" name="file"/>
+							</li>
+
+							<li>
+								请求路径：<input type="text" name="path"/>
+							</li>
+
+							<li>
+								账号：<input type="text" name="account"/>
+							</li>
+
+							<li>
+								密码：<input type="text" name="pwd"/>
+							</li>
+
+							<li>
+								设备ID：<input type="text" name="devId"/>
+							</li>
+
+							<li>
+								设备请求时间：<input type="text" name="time"/>
+							</li>
+
+							<li>
+								状态：<input type="text" name="state"/>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:tConsumerMachine:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:tConsumerMachine:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:tConsumerMachine:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:tConsumerMachine:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:tConsumerMachine:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:tConsumerMachine:remove')}]];
+        var prefix = ctx + "system/tConsumerMachine";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "消费机",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					title : 'ID',
+					visible: false
+				},
+				{
+					field : 'shopInfo', 
+					title : '商户信息',
+					sortable: true
+				},
+				{
+					field : 'shopNum', 
+					title : '商户编号',
+					sortable: true
+				},
+				{
+					field : 'kalman', 
+					title : '卡密',
+					sortable: true
+				},
+				{
+					field : 'devMode', 
+					title : '本设备模式',
+					sortable: true
+				},
+				{
+					field : 'domain', 
+					title : '服务器域名',
+					sortable: true
+				},
+				{
+					field : 'port', 
+					title : '端口号',
+					sortable: true
+				},
+				{
+					field : 'maxMoney', 
+					title : '最大消费金额',
+					sortable: true
+				},
+				{
+					field : 'deposit', 
+					title : '押金',
+					sortable: true
+				},
+				{
+					field : 'current', 
+					title : '当次限额',
+					sortable: true
+				},
+				{
+					field : 'cardLabeling', 
+					title : '卡标示',
+					sortable: true
+				},
+				{
+					field : 'discount', 
+					title : '折扣',
+					sortable: true
+				},
+				{
+					field : 'cardType', 
+					title : '卡类型',
+					sortable: true
+				},
+				{
+					field : 'devName', 
+					title : '本设备名称',
+					sortable: true
+				},
+				{
+					field : 'file', 
+					title : '升级文件目录及信息',
+					sortable: true
+				},
+				{
+					field : 'path', 
+					title : '请求路径',
+					sortable: true
+				},
+				{
+					field : 'account', 
+					title : '账号',
+					sortable: true
+				},
+				{
+					field : 'pwd', 
+					title : '密码',
+					sortable: true
+				},
+				{
+					field : 'devId', 
+					title : '设备ID',
+					sortable: true
+				},
+				{
+					field : 'time', 
+					title : '设备请求时间',
+					sortable: true
+				},
+					{
+						field : 'state',
+						title : '设备状态',
+						sortable: true
+					},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>
